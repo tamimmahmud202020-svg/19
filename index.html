@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>🌸 তুমি কি রাগ করেছিলে?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            font-family: 'Noto Sans Bengali', 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── FLOATING EMOJIS ── */
+        .floating-emojis {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-emoji {
+            position: absolute;
+            font-size: 2.2rem;
+            opacity: 0.30;
+            animation: floatUp 20s infinite ease-in-out;
+            user-select: none;
+        }
+        .float-emoji:nth-child(1) {
+            left: 5%;
+            animation-delay: 0s;
+            font-size: 2.8rem;
+        }
+        .float-emoji:nth-child(2) {
+            left: 15%;
+            animation-delay: 3.2s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(3) {
+            left: 28%;
+            animation-delay: 6.5s;
+            font-size: 3rem;
+        }
+        .float-emoji:nth-child(4) {
+            left: 42%;
+            animation-delay: 1.8s;
+            font-size: 2.4rem;
+        }
+        .float-emoji:nth-child(5) {
+            left: 55%;
+            animation-delay: 4.7s;
+            font-size: 3.2rem;
+        }
+        .float-emoji:nth-child(6) {
+            left: 68%;
+            animation-delay: 8.2s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(7) {
+            left: 78%;
+            animation-delay: 2.3s;
+            font-size: 2.6rem;
+        }
+        .float-emoji:nth-child(8) {
+            left: 88%;
+            animation-delay: 5.9s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(9) {
+            left: 10%;
+            animation-delay: 10s;
+            font-size: 2.2rem;
+        }
+        .float-emoji:nth-child(10) {
+            left: 72%;
+            animation-delay: 12s;
+            font-size: 2.8rem;
+        }
+        .float-emoji:nth-child(11) {
+            left: 35%;
+            animation-delay: 14s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(12) {
+            left: 92%;
+            animation-delay: 7s;
+            font-size: 2.4rem;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.30;
+            }
+            90% {
+                opacity: 0.30;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ── BADGES ── */
+        .ghost-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px 6px 10px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #7b4a8c;
+            box-shadow: 0 4px 15px rgba(123, 74, 140, 0.15);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .ghost-badge span {
+            font-size: 1.2rem;
+        }
+
+        .ost-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(6px);
+            padding: 4px 12px 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #a060b0;
+            box-shadow: 0 2px 10px rgba(160, 96, 176, 0.12);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.5px;
+        }
+        .ost-badge span {
+            font-size: 0.9rem;
+        }
+
+        /* ── MAIN CARD ── */
+        .card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 40px 32px 44px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(123, 74, 140, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.6) inset, 0 0 40px rgba(244, 143, 177, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            text-align: center;
+        }
+
+        .card-deco {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        .card-deco span {
+            animation: sparkle 2.4s infinite alternate;
+        }
+        .card-deco span:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        .card-deco span:nth-child(3) {
+            animation-delay: 1.2s;
+        }
+        .card-deco span:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .card-deco span:nth-child(5) {
+            animation-delay: 0.9s;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.2) rotate(12deg);
+                opacity: 1;
+            }
+        }
+
+        .question {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4a2c5a;
+            margin: 8px 0 4px;
+            line-height: 1.3;
+            letter-spacing: -0.3px;
+        }
+        .question .heart-icon {
+            color: #e57373;
+            display: inline-block;
+            animation: heartbeat 1.6s infinite;
+        }
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+        }
+
+        .sub-question {
+            font-size: 1rem;
+            color: #8a6a9a;
+            font-weight: 400;
+            margin-top: -2px;
+            margin-bottom: 28px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0 28px;
+        }
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4b0dc, transparent);
+            border-radius: 4px;
+        }
+        .divider-emoji {
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+
+        .yes-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 8px 0 12px;
+        }
+
+        .yes-btn {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .yes-btn:active {
+            transform: scale(0.94);
+        }
+        .yes-btn .btn-emoji {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
+        .yes-btn:hover .btn-emoji {
+            transform: scale(1.3) rotate(-8deg);
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #f8a5b8, #f06292);
+            box-shadow: 0 6px 24px rgba(240, 98, 146, 0.35);
+        }
+        .btn-pink:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(240, 98, 146, 0.45);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #ce93d8, #ab47bc);
+            box-shadow: 0 6px 24px rgba(171, 71, 188, 0.30);
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(171, 71, 188, 0.40);
+        }
+        .btn-coral {
+            background: linear-gradient(135deg, #ffab91, #ff7043);
+            box-shadow: 0 6px 24px rgba(255, 112, 67, 0.30);
+        }
+        .btn-coral:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(255, 112, 67, 0.40);
+        }
+
+        .footer-text {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: #a080b0;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            opacity: 0.7;
+        }
+        .footer-text span {
+            display: inline-block;
+            animation: sparkle 2.8s infinite alternate;
+        }
+
+        /* ─── APOLOGY OVERLAY ─── */
+        .apology-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        .apology-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .apology-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 182, 193, 0.40), rgba(243, 229, 245, 0.65));
+            backdrop-filter: blur(12px);
+            animation: fadeIn 0.7s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .apology-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            max-width: 520px;
+            width: 92%;
+            padding: 24px 20px 30px;
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: scale(0) rotate(-6deg);
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            border-radius: 48px;
+            box-shadow: 0 30px 80px rgba(123, 74, 140, 0.20), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0) rotate(-6deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.05) rotate(1deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* ── BUNNY WITH FLOWERS ── */
+        .bunny-flower {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 4.2rem;
+            line-height: 1;
+            animation: bunnyFloat 2.4s ease-in-out infinite alternate;
+            user-select: none;
+            margin-bottom: 2px;
+        }
+        .bunny-flower .bunny {
+            font-size: 5rem;
+        }
+        .bunny-flower .flower {
+            font-size: 3.2rem;
+            animation: flowerSway 2.8s ease-in-out infinite alternate;
+        }
+        .bunny-flower .flower:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+        .bunny-flower .flower:nth-child(4) {
+            animation-delay: 1.2s;
+        }
+
+        @keyframes bunnyFloat {
+            0% {
+                transform: translateY(0px) rotate(-2deg);
+            }
+            100% {
+                transform: translateY(-10px) rotate(2deg);
+            }
+        }
+        @keyframes flowerSway {
+            0% {
+                transform: rotate(-8deg) scale(1);
+            }
+            100% {
+                transform: rotate(8deg) scale(1.1);
+            }
+        }
+
+        /* ── APOLOGY LETTER ── */
+        .apology-letter {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            text-align: center;
+            padding: 8px 4px 4px;
+            width: 100%;
+        }
+
+        .apology-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #6a1b4a;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+        .apology-title .heart {
+            color: #e57373;
+        }
+
+        .apology-poem {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: #4a2c5a;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.4);
+            padding: 16px 18px;
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 2px 20px rgba(123, 74, 140, 0.06);
+            margin: 6px 0 10px;
+            white-space: pre-line;
+        }
+        .apology-poem .highlight {
+            color: #d6336c;
+            font-weight: 700;
+        }
+
+        .apology-footer {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #7b4a8c;
+            margin-top: 4px;
+            letter-spacing: 0.3px;
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 8px rgba(233, 30, 99, 0.05);
+            }
+            100% {
+                text-shadow: 0 0 24px rgba(233, 30, 99, 0.20);
+            }
+        }
+
+        /* ─── FLOATING PETALS (inside overlay) ─── */
+        .petal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99;
+            overflow: hidden;
+        }
+        .petal {
+            position: absolute;
+            font-size: 1.8rem;
+            opacity: 0;
+            animation: petalFall linear forwards;
+            user-select: none;
+        }
+        @keyframes petalFall {
+            0% {
+                opacity: 0.9;
+                transform: translateY(-20px) rotate(0deg) scale(0.6);
+            }
+            10% {
+                opacity: 0.9;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(110vh) rotate(720deg) scale(1.2);
+            }
+        }
+
+        /* ── HEARTS BURST ── */
+        .heart-burst {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 101;
+            overflow: hidden;
+        }
+        .heart-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: heartFly 2.6s ease-out forwards;
+            opacity: 0;
+        }
+        @keyframes heartFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.6) rotate(720deg);
+            }
+        }
+
+        /* ── CONFETTI ── */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 102;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: confettiFall 3.2s ease-in forwards;
+            opacity: 0;
+        }
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-20px) rotate(0deg) scale(0);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(20vh) rotate(120deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(110vh) rotate(720deg) scale(0.5);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 520px) {
+            .card {
+                padding: 28px 20px 32px;
+                border-radius: 36px;
+            }
+            .question {
+                font-size: 1.6rem;
+            }
+            .sub-question {
+                font-size: 0.85rem;
+                margin-bottom: 20px;
+            }
+            .yes-btn {
+                font-size: 1.25rem;
+                padding: 14px 16px;
+            }
+            .apology-content {
+                padding: 18px 14px 24px;
+                border-radius: 36px;
+            }
+            .apology-title {
+                font-size: 1.3rem;
+            }
+            .apology-poem {
+                font-size: 0.95rem;
+                padding: 14px 12px;
+                line-height: 1.8;
+            }
+            .apology-footer {
+                font-size: 1rem;
+            }
+            .bunny-flower {
+                font-size: 3rem;
+            }
+            .bunny-flower .bunny {
+                font-size: 3.8rem;
+            }
+            .bunny-flower .flower {
+                font-size: 2.4rem;
+            }
+            .float-emoji {
+                font-size: 1.6rem !important;
+            }
+            .ghost-badge {
+                top: 12px;
+                right: 12px;
+                font-size: 0.7rem;
+                padding: 4px 10px 4px 8px;
+            }
+            .ost-badge {
+                bottom: 14px;
+                right: 14px;
+                font-size: 0.6rem;
+                padding: 3px 10px 3px 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .question {
+                font-size: 1.3rem;
+            }
+            .yes-btn {
+                font-size: 1.05rem;
+                padding: 12px 14px;
+            }
+            .apology-content {
+                padding: 14px 10px 18px;
+                border-radius: 28px;
+            }
+            .apology-title {
+                font-size: 1.1rem;
+            }
+            .apology-poem {
+                font-size: 0.85rem;
+                padding: 10px 10px;
+                line-height: 1.7;
+            }
+            .apology-footer {
+                font-size: 0.9rem;
+            }
+            .bunny-flower {
+                font-size: 2.4rem;
+            }
+            .bunny-flower .bunny {
+                font-size: 3rem;
+            }
+            .bunny-flower .flower {
+                font-size: 2rem;
+            }
+            .card {
+                padding: 20px 14px 24px;
+                border-radius: 28px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+        .no-scroll {
+            overflow: hidden;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── FLOATING EMOJIS ─── -->
+    <div class="floating-emojis">
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+        <span class="float-emoji">🐰</span>
+        <span class="float-emoji">🎀</span>
+        <span class="float-emoji">🍓</span>
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+        <span class="float-emoji">🐰</span>
+        <span class="float-emoji">🎀</span>
+        <span class="float-emoji">🍓</span>
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+    </div>
+
+    <!-- ─── BADGES ─── -->
+    <div class="ghost-badge">
+        <span>👻</span> bhoot.com &bull; প্রিয়
+    </div>
+    <div class="ost-badge">
+        <span>🎵</span> OST &bull; ❤️
+    </div>
+
+    <!-- ─── MAIN CARD ─── -->
+    <div class="card">
+        <div class="card-deco">
+            <span>🌸</span>
+            <span>🐰</span>
+            <span>🎀</span>
+            <span>🍓</span>
+            <span>🐇</span>
+        </div>
+
+        <h1 class="question">
+            তুমি কি <span class="heart-icon">❤️</span><br />রাগ করেছিলে?
+        </h1>
+        <p class="sub-question">— একটা ছোট্ট প্রশ্ন, শুধু তোমার জন্য —</p>
+
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-emoji">🌸</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <div class="yes-buttons">
+            <button class="yes-btn btn-pink" data-emoji="🌸">
+                <span class="btn-emoji">🌸</span> হ্যাঁ
+            </button>
+            <button class="yes-btn btn-purple" data-emoji="🐰">
+                <span class="btn-emoji">🐰</span> হ্যাঁ
+            </button>
+            <button class="yes-btn btn-coral" data-emoji="🍓">
+                <span class="btn-emoji">🍓</span> হ্যাঁ
+            </button>
+        </div>
+
+        <div class="footer-text">
+            <span>🐇</span> যেকোনো একটি বেছে নাও &bull; <span>🎀</span>
+        </div>
+    </div>
+
+    <!-- ─── APOLOGY OVERLAY ─── -->
+    <div class="apology-overlay" id="apologyOverlay">
+        <div class="apology-backdrop"></div>
+        <div class="apology-content">
+            <!-- Bunny with flowers -->
+            <div class="bunny-flower">
+                <span class="flower">🌸</span>
+                <span class="bunny">🐰</span>
+                <span class="flower">🌷</span>
+                <span class="flower">🌸</span>
+            </div>
+
+            <!-- Apology Letter -->
+            <div class="apology-letter">
+                <div class="apology-title">
+                    <span class="heart">❤️</span> আমার প্রিয় <span class="heart">❤️</span>
+                </div>
+                <div class="apology-poem">
+                    জানি আমি ভুল করেছি,
+                    তোমার মন ভেঙেছি।
+
+                    প্রতিটি ভুলের জন্য,
+                    হাজার বার ক্ষমা চাই।
+
+                    তুমি আমার সবচেয়ে গুরুত্বপূর্ণ,
+                    তোমাকে ছাড়া আমি অসম্পূর্ণ।
+
+                    <span class="highlight">আমি খুবই দুঃখিত</span> 💔
+                </div>
+                <div class="apology-footer">
+                    🌸 তোমাকে অনেক ভালোবাসি 🌸
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ─── PETAL CONTAINER ─── -->
+    <div class="petal-container" id="petalContainer"></div>
+
+    <!-- ─── HEART BURST ─── -->
+    <div class="heart-burst" id="heartBurst"></div>
+
+    <!-- ─── CONFETTI ─── -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // ────────────────────────────────────────────────────
+        //  APOLOGY TRIGGER
+        // ────────────────────────────────────────────────────
+
+        const apologyOverlay = document.getElementById('apologyOverlay');
+        const heartBurst = document.getElementById('heartBurst');
+        const confettiContainer = document.getElementById('confettiContainer');
+        const petalContainer = document.getElementById('petalContainer');
+        const body = document.body;
+
+        let isShowing = false;
+
+        function triggerApology() {
+            if (isShowing) return;
+            isShowing = true;
+
+            // Show overlay
+            apologyOverlay.classList.add('active');
+            body.classList.add('no-scroll');
+
+            // Burst hearts & confetti
+            burstHearts();
+            burstConfetti();
+            startPetals();
+
+            // Auto‑dismiss after 6.5 seconds
+            setTimeout(() => {
+                apologyOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isShowing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+                petalContainer.innerHTML = '';
+            }, 6500);
+        }
+
+        // ─── HEART BURST ──────────────────────────────
+        function burstHearts() {
+            const emojis = ['❤️', '💖', '💗', '💓', '💕', '❤️‍🔥', '🌸', '🐰', '🎀', '🍓', '🌷'];
+            const count = 55;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'heart-particle';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                const size = 1.2 + Math.random() * 2.4;
+                el.style.fontSize = size + 'rem';
+
+                const x = 10 + Math.random() * 80;
+                const y = 10 + Math.random() * 80;
+                el.style.left = x + '%';
+                el.style.top = y + '%';
+
+                const tx = (Math.random() - 0.5) * 600;
+                const ty = (Math.random() - 0.5) * 500 - 200;
+                el.style.setProperty('--tx', tx + 'px');
+                el.style.setProperty('--ty', ty + 'px');
+
+                el.style.animationDuration = 1.6 + Math.random() * 1.6 + 's';
+                el.style.animationDelay = Math.random() * 0.7 + 's';
+
+                heartBurst.appendChild(el);
+            }
+
+            setTimeout(() => {
+                heartBurst.innerHTML = '';
+            }, 4500);
+        }
+
+        // ─── CONFETTI ──────────────────────────────────
+        function burstConfetti() {
+            const colors = ['#f06292', '#ce93d8', '#ffab91', '#ffd54f', '#81d4fa', '#aed581', '#ff8a65', '#f48fb1', '#e57373'];
+            const count = 50;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                const size = 4 + Math.random() * 10;
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = '-10%';
+
+                el.style.animationDuration = 2.4 + Math.random() * 2.0 + 's';
+                el.style.animationDelay = Math.random() * 1.4 + 's';
+                el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+
+                confettiContainer.appendChild(el);
+            }
+
+            setTimeout(() => {
+                confettiContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // ─── FLOATING PETALS ──────────────────────────
+        function startPetals() {
+            const petals = ['🌸', '🌷', '🌸', '🌺', '🌸', '🌼'];
+            const count = 28;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'petal';
+                el.textContent = petals[Math.floor(Math.random() * petals.length)];
+
+                const size = 1.2 + Math.random() * 1.8;
+                el.style.fontSize = size + 'rem';
+
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = '-5%';
+
+                const duration = 4 + Math.random() * 4;
+                el.style.animationDuration = duration + 's';
+                el.style.animationDelay = Math.random() * 3 + 's';
+
+                petalContainer.appendChild(el);
+            }
+
+            setTimeout(() => {
+                petalContainer.innerHTML = '';
+            }, 8000);
+        }
+
+        // ─── ATTACH TO ALL YES BUTTONS ─────────────────
+        document.querySelectorAll('.yes-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.currentTarget.style.transform = 'scale(0.92)';
+                setTimeout(() => {
+                    e.currentTarget.style.transform = '';
+                }, 180);
+
+                triggerApology();
+                if (navigator.vibrate) navigator.vibrate(30);
+            });
+
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.94)';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        // ─── CLOSE ON BACKDROP CLICK ───────────────────
+        document.querySelector('.apology-backdrop').addEventListener('click', () => {
+            if (isShowing) {
+                apologyOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isShowing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+                petalContainer.innerHTML = '';
+            }
+        });
+
+        // ─── ESC TO CLOSE ──────────────────────────────
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isShowing) {
+                apologyOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isShowing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+                petalContainer.innerHTML = '';
+            }
+        });
+
+        document.addEventListener('dblclick', (e) => e.preventDefault());
+
+        console.log('🌸🐰 তুমি কি রাগ করেছিলে? — আমি খুবই দুঃখিত ❤️');
+    </script>
+
+</body>
+</html>
