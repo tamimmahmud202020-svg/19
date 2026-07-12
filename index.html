@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>🌸 তুমি কি রাগ করেছিলে?</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <style>
+        /* ── RESET & BASE ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #fce4ec 0%, #f3e5f5 40%, #e8eaf6 100%);
+            font-family: 'Noto Sans Bengali', 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* ── FLOATING EMOJIS (background) ── */
+        .floating-emojis {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-emoji {
+            position: absolute;
+            font-size: 2.2rem;
+            opacity: 0.35;
+            animation: floatUp 18s infinite ease-in-out;
+            user-select: none;
+        }
+
+        .float-emoji:nth-child(1) {
+            left: 5%;
+            animation-delay: 0s;
+            font-size: 2.8rem;
+        }
+        .float-emoji:nth-child(2) {
+            left: 15%;
+            animation-delay: 3.2s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(3) {
+            left: 28%;
+            animation-delay: 6.5s;
+            font-size: 3rem;
+        }
+        .float-emoji:nth-child(4) {
+            left: 42%;
+            animation-delay: 1.8s;
+            font-size: 2.4rem;
+        }
+        .float-emoji:nth-child(5) {
+            left: 55%;
+            animation-delay: 4.7s;
+            font-size: 3.2rem;
+        }
+        .float-emoji:nth-child(6) {
+            left: 68%;
+            animation-delay: 8.2s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(7) {
+            left: 78%;
+            animation-delay: 2.3s;
+            font-size: 2.6rem;
+        }
+        .float-emoji:nth-child(8) {
+            left: 88%;
+            animation-delay: 5.9s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(9) {
+            left: 10%;
+            animation-delay: 10s;
+            font-size: 2.2rem;
+        }
+        .float-emoji:nth-child(10) {
+            left: 72%;
+            animation-delay: 12s;
+            font-size: 2.8rem;
+        }
+        .float-emoji:nth-child(11) {
+            left: 35%;
+            animation-delay: 14s;
+            font-size: 2rem;
+        }
+        .float-emoji:nth-child(12) {
+            left: 92%;
+            animation-delay: 7s;
+            font-size: 2.4rem;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.35;
+            }
+            90% {
+                opacity: 0.35;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(720deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* ── GHOST (bhoot.com reference) ── */
+        .ghost-badge {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            padding: 6px 14px 6px 10px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #7b4a8c;
+            box-shadow: 0 4px 15px rgba(123, 74, 140, 0.15);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            font-family: 'Noto Sans Bengali', sans-serif;
+        }
+        .ghost-badge span {
+            font-size: 1.2rem;
+        }
+
+        /* ── K-DRAMA OST BADGE ── */
+        .ost-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(6px);
+            padding: 4px 12px 4px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #a060b0;
+            box-shadow: 0 2px 10px rgba(160, 96, 176, 0.12);
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.5px;
+        }
+        .ost-badge span {
+            font-size: 0.9rem;
+        }
+
+        /* ── MAIN CARD ── */
+        .card {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(20px);
+            border-radius: 48px;
+            padding: 40px 32px 44px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow:
+                0 20px 60px rgba(123, 74, 140, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.6) inset,
+                0 0 40px rgba(244, 143, 177, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        /* ── DECORATIVE TOP ── */
+        .card-deco {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        .card-deco span {
+            animation: sparkle 2.4s infinite alternate;
+        }
+        .card-deco span:nth-child(2) {
+            animation-delay: 0.6s;
+        }
+        .card-deco span:nth-child(3) {
+            animation-delay: 1.2s;
+        }
+        .card-deco span:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+        .card-deco span:nth-child(5) {
+            animation-delay: 0.9s;
+        }
+
+        @keyframes sparkle {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            100% {
+                transform: scale(1.2) rotate(12deg);
+                opacity: 1;
+            }
+        }
+
+        /* ── TITLE / QUESTION ── */
+        .question {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4a2c5a;
+            margin: 8px 0 4px;
+            line-height: 1.3;
+            letter-spacing: -0.3px;
+        }
+        .question .heart-icon {
+            color: #e57373;
+            display: inline-block;
+            animation: heartbeat 1.6s infinite;
+        }
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+            }
+        }
+
+        .sub-question {
+            font-size: 1rem;
+            color: #8a6a9a;
+            font-weight: 400;
+            margin-top: -2px;
+            margin-bottom: 28px;
+            opacity: 0.7;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 12px 0 28px;
+        }
+        .divider-line {
+            flex: 1;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #d4b0dc, transparent);
+            border-radius: 4px;
+        }
+        .divider-emoji {
+            font-size: 1.2rem;
+            opacity: 0.6;
+        }
+
+        /* ── THREE YES BUTTONS ── */
+        .yes-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 8px 0 12px;
+        }
+
+        .yes-btn {
+            padding: 16px 20px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            font-family: 'Noto Sans Bengali', sans-serif;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+            letter-spacing: 1px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .yes-btn:active {
+            transform: scale(0.94);
+        }
+
+        .yes-btn .btn-emoji {
+            font-size: 1.4rem;
+            transition: transform 0.3s ease;
+        }
+        .yes-btn:hover .btn-emoji {
+            transform: scale(1.3) rotate(-8deg);
+        }
+
+        /* button 1 — soft pink */
+        .btn-pink {
+            background: linear-gradient(135deg, #f8a5b8, #f06292);
+            box-shadow: 0 6px 24px rgba(240, 98, 146, 0.35);
+        }
+        .btn-pink:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(240, 98, 146, 0.45);
+        }
+
+        /* button 2 — soft purple */
+        .btn-purple {
+            background: linear-gradient(135deg, #ce93d8, #ab47bc);
+            box-shadow: 0 6px 24px rgba(171, 71, 188, 0.30);
+        }
+        .btn-purple:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(171, 71, 188, 0.40);
+        }
+
+        /* button 3 — soft coral */
+        .btn-coral {
+            background: linear-gradient(135deg, #ffab91, #ff7043);
+            box-shadow: 0 6px 24px rgba(255, 112, 67, 0.30);
+        }
+        .btn-coral:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 10px 32px rgba(255, 112, 67, 0.40);
+        }
+
+        /* ── FOOTER TEXT ── */
+        .footer-text {
+            margin-top: 24px;
+            font-size: 0.85rem;
+            color: #a080b0;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+            opacity: 0.7;
+        }
+        .footer-text span {
+            display: inline-block;
+            animation: sparkle 2.8s infinite alternate;
+        }
+
+        /* ── CAT KISS OVERLAY ── */
+        .kiss-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .kiss-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .kiss-backdrop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 182, 193, 0.35), rgba(243, 229, 245, 0.55));
+            backdrop-filter: blur(6px);
+            animation: kissFade 0.6s ease forwards;
+        }
+
+        @keyframes kissFade {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .kiss-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: bunnyPop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            transform: scale(0);
+            gap: 12px;
+            padding: 20px;
+        }
+
+        @keyframes bunnyPop {
+            0% {
+                transform: scale(0) rotate(-12deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.15) rotate(3deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Cat kiss GIF */
+        .cat-kiss-gif {
+            max-width: 80vw;
+            max-height: 55vh;
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(233, 30, 99, 0.25);
+            animation: catFloat 2.2s ease-in-out infinite alternate;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(2px);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            object-fit: contain;
+        }
+
+        @keyframes catFloat {
+            0% {
+                transform: translateY(0px) rotate(-1deg);
+            }
+            100% {
+                transform: translateY(-10px) rotate(1deg);
+            }
+        }
+
+        .kiss-text {
+            font-family: 'Noto Sans Bengali', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #6a1b4a;
+            margin-top: 4px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(4px);
+            padding: 10px 28px;
+            border-radius: 60px;
+            box-shadow: 0 4px 24px rgba(106, 27, 74, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: textGlow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes textGlow {
+            0% {
+                text-shadow: 0 0 8px rgba(233, 30, 99, 0.1);
+            }
+            100% {
+                text-shadow: 0 0 24px rgba(233, 30, 99, 0.25);
+            }
+        }
+
+        /* ── HEARTS BURST ── */
+        .heart-burst {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 101;
+            overflow: hidden;
+        }
+
+        .heart-particle {
+            position: absolute;
+            font-size: 2rem;
+            animation: heartFly 2.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        @keyframes heartFly {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.5) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.6) rotate(720deg);
+            }
+        }
+
+        /* ── CONFETTI (tiny sparkles) ── */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 102;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: confettiFall 3s ease-in forwards;
+            opacity: 0;
+        }
+
+        @keyframes confettiFall {
+            0% {
+                opacity: 1;
+                transform: translateY(-20px) rotate(0deg) scale(0);
+            }
+            20% {
+                opacity: 1;
+                transform: translateY(20vh) rotate(120deg) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(110vh) rotate(720deg) scale(0.5);
+            }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 520px) {
+            .card {
+                padding: 28px 20px 32px;
+                border-radius: 36px;
+            }
+            .question {
+                font-size: 1.6rem;
+            }
+            .sub-question {
+                font-size: 0.85rem;
+                margin-bottom: 20px;
+            }
+            .yes-btn {
+                font-size: 1.25rem;
+                padding: 14px 16px;
+            }
+            .cat-kiss-gif {
+                max-width: 90vw;
+                max-height: 45vh;
+            }
+            .kiss-text {
+                font-size: 1.3rem;
+                padding: 8px 20px;
+            }
+            .float-emoji {
+                font-size: 1.6rem !important;
+            }
+            .ghost-badge {
+                top: 12px;
+                right: 12px;
+                font-size: 0.7rem;
+                padding: 4px 10px 4px 8px;
+            }
+            .ost-badge {
+                bottom: 14px;
+                right: 14px;
+                font-size: 0.6rem;
+                padding: 3px 10px 3px 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .question {
+                font-size: 1.3rem;
+            }
+            .yes-btn {
+                font-size: 1.05rem;
+                padding: 12px 14px;
+            }
+            .cat-kiss-gif {
+                max-width: 95vw;
+                max-height: 40vh;
+            }
+            .kiss-text {
+                font-size: 1rem;
+                padding: 6px 16px;
+            }
+            .card {
+                padding: 20px 14px 24px;
+                border-radius: 28px;
+            }
+        }
+
+        /* ── SCROLLBAR ── */
+        ::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        /* ── PREVENT OVERFLOW ── */
+        .no-scroll {
+            overflow: hidden;
+            height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ─── FLOATING EMOJIS ─── -->
+    <div class="floating-emojis">
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+        <span class="float-emoji">🐰</span>
+        <span class="float-emoji">🎀</span>
+        <span class="float-emoji">🍓</span>
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+        <span class="float-emoji">🐰</span>
+        <span class="float-emoji">🎀</span>
+        <span class="float-emoji">🍓</span>
+        <span class="float-emoji">🌸</span>
+        <span class="float-emoji">🐇</span>
+    </div>
+
+    <!-- ─── GHOST BADGE (bhoot.com) ─── -->
+    <div class="ghost-badge">
+        <span>👻</span> bhoot.com &bull; প্রিয়
+    </div>
+
+    <!-- ─── OST BADGE ─── -->
+    <div class="ost-badge">
+        <span>🎵</span> OST &bull; ❤️
+    </div>
+
+    <!-- ─── MAIN CARD ─── -->
+    <div class="card">
+
+        <!-- decorative top -->
+        <div class="card-deco">
+            <span>🌸</span>
+            <span>🐰</span>
+            <span>🎀</span>
+            <span>🍓</span>
+            <span>🐇</span>
+        </div>
+
+        <!-- question -->
+        <h1 class="question">
+            তুমি কি <span class="heart-icon">❤️</span><br />রাগ করেছিলে?
+        </h1>
+        <p class="sub-question">— একটা ছোট্ট প্রশ্ন, শুধু তোমার জন্য —</p>
+
+        <!-- divider -->
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-emoji">🌸</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <!-- three YES buttons -->
+        <div class="yes-buttons">
+            <button class="yes-btn btn-pink" data-emoji="🌸">
+                <span class="btn-emoji">🌸</span> হ্যাঁ
+            </button>
+            <button class="yes-btn btn-purple" data-emoji="🐰">
+                <span class="btn-emoji">🐰</span> হ্যাঁ
+            </button>
+            <button class="yes-btn btn-coral" data-emoji="🍓">
+                <span class="btn-emoji">🍓</span> হ্যাঁ
+            </button>
+        </div>
+
+        <!-- footer -->
+        <div class="footer-text">
+            <span>🐇</span> যেকোনো একটি বেছে নাও &bull; <span>🎀</span>
+        </div>
+
+    </div>
+
+    <!-- ─── CAT KISS OVERLAY ─── -->
+    <div class="kiss-overlay" id="kissOverlay">
+        <div class="kiss-backdrop"></div>
+        <div class="kiss-content">
+            <!-- Cat kiss GIF -->
+            <img class="cat-kiss-gif" 
+                 src="https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif" 
+                 alt="Cat kissing" 
+                 loading="lazy" />
+            <div class="kiss-text">আমি তোমাকে ভালোবাসি ❤️</div>
+        </div>
+    </div>
+
+    <!-- ─── HEART BURST CONTAINER ─── -->
+    <div class="heart-burst" id="heartBurst"></div>
+
+    <!-- ─── CONFETTI CONTAINER ─── -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // ────────────────────────────────────────────────
+        //  CAT KISS — TRIGGER
+        // ────────────────────────────────────────────────
+
+        const kissOverlay = document.getElementById('kissOverlay');
+        const heartBurst = document.getElementById('heartBurst');
+        const confettiContainer = document.getElementById('confettiContainer');
+        const body = document.body;
+
+        let isKissing = false;
+
+        function triggerKiss() {
+            if (isKissing) return;
+            isKissing = true;
+
+            // Show overlay
+            kissOverlay.classList.add('active');
+            body.classList.add('no-scroll');
+
+            // Burst hearts & confetti
+            burstHearts();
+            burstConfetti();
+
+            // Auto‑dismiss after 5 seconds
+            setTimeout(() => {
+                kissOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isKissing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+            }, 5000);
+        }
+
+        // ─── HEART BURST ──────────────────────────────
+        function burstHearts() {
+            const emojis = ['❤️', '💖', '💗', '💓', '💕', '❤️‍🔥', '🌸', '🐰', '🎀', '🍓'];
+            const count = 50;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'heart-particle';
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+                const size = 1.2 + Math.random() * 2.2;
+                el.style.fontSize = size + 'rem';
+
+                const x = 20 + Math.random() * 60;
+                const y = 20 + Math.random() * 60;
+                el.style.left = x + '%';
+                el.style.top = y + '%';
+
+                const tx = (Math.random() - 0.5) * 500;
+                const ty = (Math.random() - 0.5) * 500 - 200;
+                el.style.setProperty('--tx', tx + 'px');
+                el.style.setProperty('--ty', ty + 'px');
+
+                el.style.animationDuration = 1.6 + Math.random() * 1.4 + 's';
+                el.style.animationDelay = Math.random() * 0.6 + 's';
+
+                heartBurst.appendChild(el);
+            }
+
+            setTimeout(() => {
+                heartBurst.innerHTML = '';
+            }, 4000);
+        }
+
+        // ─── CONFETTI SPARKLES ─────────────────────────
+        function burstConfetti() {
+            const colors = ['#f06292', '#ce93d8', '#ffab91', '#ffd54f', '#81d4fa', '#aed581', '#ff8a65', '#f48fb1'];
+            const count = 45;
+
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'confetti-piece';
+                el.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                const size = 4 + Math.random() * 10;
+                el.style.width = size + 'px';
+                el.style.height = size + 'px';
+
+                el.style.left = Math.random() * 100 + '%';
+                el.style.top = '-10%';
+
+                el.style.animationDuration = 2.2 + Math.random() * 1.8 + 's';
+                el.style.animationDelay = Math.random() * 1.2 + 's';
+                el.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+
+                confettiContainer.appendChild(el);
+            }
+
+            setTimeout(() => {
+                confettiContainer.innerHTML = '';
+            }, 4500);
+        }
+
+        // ─── ATTACH TO ALL YES BUTTONS ─────────────────
+        document.querySelectorAll('.yes-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // ripple effect on button
+                e.currentTarget.style.transform = 'scale(0.92)';
+                setTimeout(() => {
+                    e.currentTarget.style.transform = '';
+                }, 180);
+
+                triggerKiss();
+
+                if (navigator.vibrate) navigator.vibrate(30);
+            });
+
+            btn.addEventListener('touchstart', () => {
+                btn.style.transform = 'scale(0.94)';
+            });
+            btn.addEventListener('touchend', () => {
+                btn.style.transform = '';
+            });
+        });
+
+        // ─── CLOSE OVERLAY ON BACKDROP CLICK ───────────
+        document.querySelector('.kiss-backdrop').addEventListener('click', () => {
+            if (isKissing) {
+                kissOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isKissing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+            }
+        });
+
+        // ─── KEYBOARD: ESC to close ────────────────────
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && isKissing) {
+                kissOverlay.classList.remove('active');
+                body.classList.remove('no-scroll');
+                isKissing = false;
+                heartBurst.innerHTML = '';
+                confettiContainer.innerHTML = '';
+            }
+        });
+
+        // ─── PREVENT DOUBLE TAP ZOOM (mobile) ──────────
+        document.addEventListener('dblclick', (e) => e.preventDefault());
+
+        console.log('🌸🐱 তুমি কি রাগ করেছিলে? — সব ঠিক হয়ে যাবে ❤️');
+    </script>
+
+</body>
+</html>
