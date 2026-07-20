@@ -1,0 +1,2945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PredictCup · FIFA World Cup 2026</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js">
+    </script>
+    <style>
+        /* ── reset & base ── */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html,
+        body {
+            height: 100%;
+            background: #0c0a06;
+            color: #e8e2cf;
+            font-family: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+        }
+        #root {
+            min-height: 100vh;
+        }
+
+        /* ── fonts ── */
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;700&display=swap');
+
+        :root {
+            --font-display: 'Space Grotesk', -apple-system, 'Segoe UI', sans-serif;
+            --font-body: 'Inter', -apple-system, 'Segoe UI', sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+        }
+
+        .pc-root * {
+            box-sizing: border-box;
+        }
+        .pc-root ::selection {
+            background: #ffd54a;
+            color: #1a1408;
+        }
+        .pc-root {
+            scrollbar-width: thin;
+            scrollbar-color: #3a3526 #100d08;
+        }
+        .pc-root ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .pc-root ::-webkit-scrollbar-track {
+            background: #100d08;
+        }
+        .pc-root ::-webkit-scrollbar-thumb {
+            background: #3a3526;
+            border-radius: 8px;
+        }
+
+        @keyframes pcFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pcFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-9px) rotate(6deg);
+            }
+        }
+        @keyframes pcPulseGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 213, 74, .32);
+            }
+            50% {
+                box-shadow: 0 0 0 8px rgba(255, 213, 74, 0);
+            }
+        }
+        @keyframes pcBounce {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-14px);
+            }
+        }
+        @keyframes pcShimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+        @keyframes pcSlideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -14px);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        @keyframes pcModalIn {
+            from {
+                opacity: 0;
+                transform: scale(.96) translateY(6px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        @keyframes pcLoadSweep {
+            0% {
+                transform: translateX(-110%);
+            }
+            100% {
+                transform: translateX(280%);
+            }
+        }
+        @keyframes pcStripPan {
+            to {
+                background-position: 200% center;
+            }
+        }
+        @keyframes pcRise {
+            from {
+                height: 0;
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes pcConfetti {
+            0% {
+                transform: translateY(-12px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(140px) rotate(380deg);
+                opacity: 0;
+            }
+        }
+        @keyframes pcSparkle {
+            0%,
+            100% {
+                opacity: .25;
+                transform: scale(.85);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.15);
+            }
+        }
+        @keyframes pcCrownBob {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+            50% {
+                transform: translateY(-4px) rotate(3deg);
+            }
+        }
+        @keyframes pcRingSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes pcKickIn {
+            0% {
+                transform: scale(.4) rotate(-30deg);
+                opacity: 0;
+            }
+            60% {
+                transform: scale(1.12) rotate(8deg);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1) rotate(0deg);
+            }
+        }
+        @keyframes pcGoldSheen {
+            0% {
+                background-position: -150% center;
+            }
+            100% {
+                background-position: 250% center;
+            }
+        }
+        @keyframes pcPopIn {
+            from {
+                transform: scale(.85);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+        @keyframes pcUnderlineGlow {
+            0%,
+            100% {
+                opacity: .6;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .pc-fade-up {
+            animation: pcFadeUp .55s cubic-bezier(.2, .8, .3, 1) both;
+        }
+        .pc-float {
+            animation: pcFloat 5.5s ease-in-out infinite;
+        }
+        .pc-card-hover {
+            transition: transform .2s cubic-bezier(.2, .8, .3, 1), box-shadow .2s ease, border-color .2s ease;
+        }
+        .pc-card-hover:hover {
+            transform: translateY(-3px);
+            border-color: #4a4330;
+            box-shadow: 0 14px 32px rgba(0, 0, 0, .5), 0 0 0 1px rgba(255, 213, 74, .08);
+        }
+        .pc-btn {
+            transition: transform .12s ease, filter .12s ease, box-shadow .12s ease;
+            position: relative;
+        }
+        .pc-btn:hover {
+            filter: brightness(1.09);
+        }
+        .pc-btn:active {
+            transform: scale(.95);
+        }
+        .pc-btn:focus-visible {
+            outline: 2px solid #ffd54a;
+            outline-offset: 2px;
+        }
+        .pc-modal-in {
+            animation: pcModalIn .25s cubic-bezier(.2, .8, .3, 1) both;
+        }
+        .pc-toast-in {
+            animation: pcSlideDown .32s cubic-bezier(.2, .8, .3, 1) both;
+        }
+        .pc-shimmer-text {
+            background-size: 200% auto;
+            animation: pcShimmer 3.2s linear infinite;
+        }
+        .pc-glow-pulse {
+            animation: pcPulseGlow 2.4s ease-in-out infinite;
+        }
+        .pc-bounce {
+            animation: pcBounce 1.1s ease-in-out infinite;
+        }
+        .pc-load-fill {
+            animation: pcLoadSweep 1.25s ease-in-out infinite;
+        }
+        .pc-strip {
+            animation: pcStripPan 7s linear infinite;
+        }
+        .pc-input {
+            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+        }
+        .pc-input:focus {
+            outline: none;
+            border-color: #ffd54a !important;
+            box-shadow: 0 0 0 3px rgba(255, 213, 74, .15);
+            background: #211c10 !important;
+        }
+        .pc-input:hover {
+            border-color: #4a4330;
+        }
+        .pc-drop-row {
+            transition: background .12s ease, padding-left .12s ease;
+        }
+        .pc-drop-row:hover {
+            background: #241f12;
+            padding-left: 16px;
+        }
+        .pc-podium-bar {
+            animation: pcRise .7s cubic-bezier(.2, .8, .3, 1) both;
+        }
+        .pc-confetti {
+            animation: pcConfetti 2.4s ease-in infinite;
+        }
+        .pc-sparkle {
+            animation: pcSparkle 2.1s ease-in-out infinite;
+        }
+        .pc-crown {
+            animation: pcCrownBob 2.2s ease-in-out infinite;
+        }
+        .pc-ring-spin {
+            animation: pcRingSpin 7s linear infinite;
+        }
+        .pc-kick-in {
+            animation: pcKickIn .5s cubic-bezier(.34, 1.4, .64, 1) both;
+        }
+        .pc-gold-sheen {
+            background-size: 250% auto;
+            animation: pcGoldSheen 2.6s linear infinite;
+        }
+        .pc-pop-in {
+            animation: pcPopIn .3s cubic-bezier(.3, 1.3, .6, 1) both;
+        }
+        .pc-underline-glow {
+            animation: pcUnderlineGlow 1.8s ease-in-out infinite;
+        }
+        .pc-nav-btn {
+            position: relative;
+            transition: color .2s ease;
+        }
+        .pc-nav-btn:hover {
+            color: #d9b65c !important;
+        }
+        .pc-trophy-hover {
+            transition: transform .25s cubic-bezier(.3, 1.4, .5, 1);
+        }
+        .pc-trophy-hover:hover {
+            transform: scale(1.12) rotate(-4deg);
+        }
+        .pc-gold-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .pc-fade-up,
+            .pc-float,
+            .pc-card-hover,
+            .pc-btn,
+            .pc-modal-in,
+            .pc-toast-in,
+            .pc-shimmer-text,
+            .pc-glow-pulse,
+            .pc-bounce,
+            .pc-load-fill,
+            .pc-strip,
+            .pc-podium-bar,
+            .pc-confetti,
+            .pc-sparkle,
+            .pc-crown,
+            .pc-ring-spin,
+            .pc-kick-in,
+            .pc-gold-sheen,
+            .pc-pop-in,
+            .pc-underline-glow,
+            .pc-trophy-hover {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+
+        /* ── inline fallback for fonts ── */
+        @supports not (font-variation-settings: normal) {
+            .pc-root {
+                font-family: -apple-system, 'Segoe UI', sans-serif;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+        /* ═══════════════════════════════════════════════════════════════
+           CONSTANTS — identical to original
+           ═══════════════════════════════════════════════════════════════ */
+        const PLAYERS = ["Ahin", "Sifat", "Tamim"];
+        const MEDALS = ["🥇", "🥈", "🥉"];
+        const PIN = "MESSI";
+        const SK = "wc26_final5";
+        const STAGES = ["Group Stage", "Round of 32", "Round of 16", "Quarter-final", "Semi-final", "3rd Place", "Final"];
+        const STAGE_ICO = {
+            "Group Stage": "🌍",
+            "Round of 32": "🔵",
+            "Round of 16": "⚡",
+            "Quarter-final": "🔥",
+            "Semi-final": "🌟",
+            "3rd Place": "🥉",
+            "Final": "🏆",
+        };
+
+        /* ── ALL 72 GROUP STAGE MATCHES ── */
+        const BASE_MATCHES = [
+            { id: 1, stage: "Group Stage", group: "A", team1: "Mexico", team2: "South Africa" },
+            { id: 2, stage: "Group Stage", group: "A", team1: "South Korea", team2: "Czechia" },
+            { id: 3, stage: "Group Stage", group: "B", team1: "Canada", team2: "Bosnia and Herzegovina" },
+            { id: 4, stage: "Group Stage", group: "D", team1: "USA", team2: "Paraguay" },
+            { id: 5, stage: "Group Stage", group: "B", team1: "Qatar", team2: "Switzerland" },
+            { id: 6, stage: "Group Stage", group: "C", team1: "Brazil", team2: "Morocco" },
+            { id: 7, stage: "Group Stage", group: "C", team1: "Haiti", team2: "Scotland" },
+            { id: 8, stage: "Group Stage", group: "D", team1: "Australia", team2: "Türkiye" },
+            { id: 9, stage: "Group Stage", group: "E", team1: "Germany", team2: "Curaçao" },
+            { id: 10, stage: "Group Stage", group: "F", team1: "Netherlands", team2: "Japan" },
+            { id: 11, stage: "Group Stage", group: "F", team1: "Sweden", team2: "Tunisia" },
+            { id: 12, stage: "Group Stage", group: "E", team1: "Ivory Coast", team2: "Ecuador" },
+            { id: 13, stage: "Group Stage", group: "H", team1: "Spain", team2: "Cape Verde" },
+            { id: 14, stage: "Group Stage", group: "G", team1: "Belgium", team2: "Egypt" },
+            { id: 15, stage: "Group Stage", group: "G", team1: "Iran", team2: "New Zealand" },
+            { id: 16, stage: "Group Stage", group: "H", team1: "Saudi Arabia", team2: "Uruguay" },
+            { id: 17, stage: "Group Stage", group: "I", team1: "France", team2: "Senegal" },
+            { id: 18, stage: "Group Stage", group: "I", team1: "Iraq", team2: "Norway" },
+            { id: 19, stage: "Group Stage", group: "J", team1: "Argentina", team2: "Algeria" },
+            { id: 20, stage: "Group Stage", group: "J", team1: "Austria", team2: "Jordan" },
+            { id: 21, stage: "Group Stage", group: "K", team1: "Portugal", team2: "DR Congo" },
+            { id: 22, stage: "Group Stage", group: "L", team1: "England", team2: "Croatia" },
+            { id: 23, stage: "Group Stage", group: "L", team1: "Ghana", team2: "Panama" },
+            { id: 24, stage: "Group Stage", group: "K", team1: "Uzbekistan", team2: "Colombia" },
+            { id: 25, stage: "Group Stage", group: "A", team1: "Czechia", team2: "South Africa" },
+            { id: 26, stage: "Group Stage", group: "B", team1: "Switzerland", team2: "Bosnia and Herzegovina" },
+            { id: 27, stage: "Group Stage", group: "B", team1: "Canada", team2: "Qatar" },
+            { id: 28, stage: "Group Stage", group: "A", team1: "Mexico", team2: "South Korea" },
+            { id: 29, stage: "Group Stage", group: "D", team1: "USA", team2: "Australia" },
+            { id: 30, stage: "Group Stage", group: "D", team1: "Türkiye", team2: "Paraguay" },
+            { id: 31, stage: "Group Stage", group: "C", team1: "Scotland", team2: "Morocco" },
+            { id: 32, stage: "Group Stage", group: "C", team1: "Brazil", team2: "Haiti" },
+            { id: 33, stage: "Group Stage", group: "F", team1: "Netherlands", team2: "Sweden" },
+            { id: 34, stage: "Group Stage", group: "E", team1: "Germany", team2: "Ivory Coast" },
+            { id: 35, stage: "Group Stage", group: "E", team1: "Ecuador", team2: "Curaçao" },
+            { id: 36, stage: "Group Stage", group: "F", team1: "Tunisia", team2: "Japan" },
+            { id: 37, stage: "Group Stage", group: "H", team1: "Spain", team2: "Saudi Arabia" },
+            { id: 38, stage: "Group Stage", group: "G", team1: "Belgium", team2: "Iran" },
+            { id: 39, stage: "Group Stage", group: "G", team1: "New Zealand", team2: "Egypt" },
+            { id: 40, stage: "Group Stage", group: "H", team1: "Uruguay", team2: "Cape Verde" },
+            { id: 41, stage: "Group Stage", group: "J", team1: "Argentina", team2: "Austria" },
+            { id: 42, stage: "Group Stage", group: "I", team1: "France", team2: "Iraq" },
+            { id: 43, stage: "Group Stage", group: "I", team1: "Norway", team2: "Senegal" },
+            { id: 44, stage: "Group Stage", group: "J", team1: "Jordan", team2: "Algeria" },
+            { id: 45, stage: "Group Stage", group: "K", team1: "Portugal", team2: "Uzbekistan" },
+            { id: 46, stage: "Group Stage", group: "L", team1: "England", team2: "Ghana" },
+            { id: 47, stage: "Group Stage", group: "L", team1: "Panama", team2: "Croatia" },
+            { id: 48, stage: "Group Stage", group: "K", team1: "Colombia", team2: "DR Congo" },
+            { id: 49, stage: "Group Stage", group: "B", team1: "Bosnia and Herzegovina", team2: "Qatar" },
+            { id: 50, stage: "Group Stage", group: "B", team1: "Switzerland", team2: "Canada" },
+            { id: 51, stage: "Group Stage", group: "C", team1: "Morocco", team2: "Haiti" },
+            { id: 52, stage: "Group Stage", group: "C", team1: "Scotland", team2: "Brazil" },
+            { id: 53, stage: "Group Stage", group: "A", team1: "Czechia", team2: "Mexico" },
+            { id: 54, stage: "Group Stage", group: "A", team1: "South Africa", team2: "South Korea" },
+            { id: 55, stage: "Group Stage", group: "E", team1: "Curaçao", team2: "Ivory Coast" },
+            { id: 56, stage: "Group Stage", group: "E", team1: "Ecuador", team2: "Germany" },
+            { id: 57, stage: "Group Stage", group: "F", team1: "Japan", team2: "Sweden" },
+            { id: 58, stage: "Group Stage", group: "F", team1: "Tunisia", team2: "Netherlands" },
+            { id: 59, stage: "Group Stage", group: "D", team1: "Paraguay", team2: "Australia" },
+            { id: 60, stage: "Group Stage", group: "D", team1: "Türkiye", team2: "USA" },
+            { id: 61, stage: "Group Stage", group: "I", team1: "Norway", team2: "France" },
+            { id: 62, stage: "Group Stage", group: "I", team1: "Senegal", team2: "Iraq" },
+            { id: 63, stage: "Group Stage", group: "H", team1: "Cape Verde", team2: "Saudi Arabia" },
+            { id: 64, stage: "Group Stage", group: "H", team1: "Uruguay", team2: "Spain" },
+            { id: 65, stage: "Group Stage", group: "G", team1: "Egypt", team2: "Iran" },
+            { id: 66, stage: "Group Stage", group: "G", team1: "New Zealand", team2: "Belgium" },
+            { id: 67, stage: "Group Stage", group: "L", team1: "Croatia", team2: "Ghana" },
+            { id: 68, stage: "Group Stage", group: "L", team1: "Panama", team2: "England" },
+            { id: 69, stage: "Group Stage", group: "K", team1: "Colombia", team2: "Portugal" },
+            { id: 70, stage: "Group Stage", group: "K", team1: "DR Congo", team2: "Uzbekistan" },
+            { id: 71, stage: "Group Stage", group: "J", team1: "Algeria", team2: "Austria" },
+            { id: 72, stage: "Group Stage", group: "J", team1: "Jordan", team2: "Argentina" },
+        ];
+
+        const SAVED_PREDS = {
+            1: { Ahin: { score1: "2", score2: "0", winner: "Mexico" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Mexico" }, Tamim: { score1: "3", score2: "1", winner: "Mexico" } },
+            2: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "2", score2: "1",
+                    winner: "South Korea" }, Tamim: { score1: "2", score2: "1", winner: "South Korea" } },
+            3: { Ahin: { score1: "2", score2: "0", winner: "Canada" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Canada" }, Tamim: { score1: "2", score2: "0", winner: "Canada" } },
+            4: { Ahin: { score1: "2", score2: "0", winner: "USA" }, Sifat: { score1: "1", score2: "0",
+                    winner: "USA" }, Tamim: { score1: "2", score2: "1", winner: "USA" } },
+            5: { Ahin: { score1: "0", score2: "2", winner: "Switzerland" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Switzerland" }, Tamim: { score1: "0", score2: "2", winner: "Switzerland" } },
+            6: { Ahin: { score1: "3", score2: "1", winner: "Brazil" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Brazil" }, Tamim: { score1: "2", score2: "1", winner: "Brazil" } },
+            7: { Ahin: { score1: "2", score2: "0", winner: "Scotland" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Scotland" }, Tamim: { score1: "3", score2: "0", winner: "Scotland" } },
+            8: { Ahin: { score1: "0", score2: "2", winner: "Türkiye" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Türkiye" }, Tamim: { score1: "1", score2: "2", winner: "Türkiye" } },
+            9: { Ahin: { score1: "4", score2: "0", winner: "Germany" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Germany" }, Tamim: { score1: "6", score2: "0", winner: "Germany" } },
+            10: { Ahin: { score1: "1", score2: "0", winner: "Netherlands" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Netherlands" }, Tamim: { score1: "2", score2: "1", winner: "Netherlands" } },
+            11: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "2", score2: "1", winner: "Sweden" } },
+            12: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            13: { Ahin: { score1: "4", score2: "0", winner: "Spain" }, Sifat: { score1: "5", score2: "1",
+                    winner: "Spain" }, Tamim: { score1: "5", score2: "0", winner: "Spain" } },
+            14: { Ahin: { score1: "2", score2: "1", winner: "Belgium" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Belgium" }, Tamim: { score1: "2", score2: "1", winner: "Belgium" } },
+            15: { Ahin: { score1: "2", score2: "0", winner: "Iran" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Iran" }, Tamim: { score1: "1", score2: "0", winner: "Iran" } },
+            16: { Ahin: { score1: "0", score2: "2", winner: "Uruguay" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Uruguay" }, Tamim: { score1: "0", score2: "2", winner: "Uruguay" } },
+            17: { Ahin: { score1: "3", score2: "0", winner: "France" }, Sifat: { score1: "2", score2: "0",
+                    winner: "France" }, Tamim: { score1: "2", score2: "0", winner: "France" } },
+            18: { Ahin: { score1: "1", score2: "2", winner: "Norway" }, Sifat: { score1: "0", score2: "1",
+                    winner: "Norway" }, Tamim: { score1: "1", score2: "3", winner: "Norway" } },
+            19: { Ahin: { score1: "2", score2: "0", winner: "Argentina" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Argentina" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            20: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "2", score2: "0", winner: "Austria" } },
+            21: { Ahin: { score1: "3", score2: "0", winner: "Portugal" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Portugal" }, Tamim: { score1: "3", score2: "1", winner: "Portugal" } },
+            22: { Ahin: { score1: "2", score2: "1", winner: "England" }, Sifat: { score1: "3", score2: "1",
+                    winner: "England" }, Tamim: { score1: "2", score2: "0", winner: "England" } },
+            23: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            24: { Ahin: { score1: "1", score2: "2", winner: "Colombia" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Colombia" }, Tamim: { score1: "0", score2: "2", winner: "Colombia" } },
+            25: { Ahin: { score1: "2", score2: "0", winner: "Czechia" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Czechia" }, Tamim: { score1: "1", score2: "0", winner: "Czechia" } },
+            26: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "0",
+                    winner: "Switzerland" }, Tamim: { score1: "0", score2: "1", winner: "Bosnia and Herzegovina" } },
+            27: { Ahin: { score1: "2", score2: "1", winner: "Canada" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Canada" }, Tamim: { score1: "2", score2: "0", winner: "Canada" } },
+            28: { Ahin: { score1: "2", score2: "2", winner: "Draw" }, Sifat: { score1: "2", score2: "2",
+                    winner: "Draw" }, Tamim: { score1: "2", score2: "2", winner: "Draw" } },
+            29: { Ahin: { score1: "2", score2: "1", winner: "USA" }, Sifat: { score1: "2", score2: "1",
+                    winner: "USA" }, Tamim: { score1: "2", score2: "1", winner: "USA" } },
+            30: { Ahin: { score1: "1", score2: "0", winner: "Türkiye" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Türkiye" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            31: { Ahin: { score1: "1", score2: "2", winner: "Morocco" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Morocco" }, Tamim: { score1: "0", score2: "2", winner: "Morocco" } },
+            32: { Ahin: { score1: "3", score2: "0", winner: "Brazil" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Brazil" }, Tamim: { score1: "4", score2: "0", winner: "Brazil" } },
+            33: { Ahin: { score1: "2", score2: "1", winner: "Netherlands" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Netherlands" }, Tamim: { score1: "2", score2: "1", winner: "Netherlands" } },
+            34: { Ahin: { score1: "3", score2: "1", winner: "Germany" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Germany" }, Tamim: { score1: "2", score2: "1", winner: "Germany" } },
+            35: { Ahin: { score1: "2", score2: "0", winner: "Ecuador" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Ecuador" }, Tamim: { score1: "2", score2: "0", winner: "Ecuador" } },
+            36: { Ahin: { score1: "0", score2: "1", winner: "Japan" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Japan" }, Tamim: { score1: "0", score2: "3", winner: "Japan" } },
+            37: { Ahin: { score1: "3", score2: "0", winner: "Spain" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Spain" }, Tamim: { score1: "3", score2: "0", winner: "Spain" } },
+            38: { Ahin: { score1: "2", score2: "0", winner: "Belgium" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Belgium" }, Tamim: { score1: "2", score2: "1", winner: "Belgium" } },
+            39: { Ahin: { score1: "1", score2: "2", winner: "Egypt" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Egypt" }, Tamim: { score1: "1", score2: "2", winner: "Egypt" } },
+            40: { Ahin: { score1: "0", score2: "0", winner: "Draw" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Uruguay" }, Tamim: { score1: "2", score2: "0", winner: "Uruguay" } },
+            41: { Ahin: { score1: "2", score2: "0", winner: "Argentina" }, Sifat: { score1: "3", score2: "1",
+                    winner: "Argentina" }, Tamim: { score1: "2", score2: "1", winner: "Argentina" } },
+            42: { Ahin: { score1: "3", score2: "0", winner: "France" }, Sifat: { score1: "3", score2: "0",
+                    winner: "France" }, Tamim: { score1: "4", score2: "0", winner: "France" } },
+            43: { Ahin: { score1: "2", score2: "1", winner: "Norway" }, Sifat: { score1: "1", score2: "0",
+                    winner: "Norway" }, Tamim: { score1: "2", score2: "1", winner: "Norway" } },
+            44: { Ahin: { score1: "1", score2: "2", winner: "Algeria" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Algeria" }, Tamim: { score1: "0", score2: "2", winner: "Algeria" } },
+            45: { Ahin: { score1: "3", score2: "0", winner: "Portugal" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Portugal" }, Tamim: { score1: "3", score2: "1", winner: "Portugal" } },
+            46: { Ahin: { score1: "3", score2: "0", winner: "England" }, Sifat: { score1: "4", score2: "0",
+                    winner: "England" }, Tamim: { score1: "3", score2: "0", winner: "England" } },
+            47: { Ahin: { score1: "1", score2: "2", winner: "Croatia" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Croatia" }, Tamim: { score1: "1", score2: "2", winner: "Croatia" } },
+            48: { Ahin: { score1: "2", score2: "0", winner: "Colombia" }, Sifat: { score1: "2", score2: "0",
+                    winner: "Colombia" }, Tamim: { score1: "2", score2: "1", winner: "Colombia" } },
+            49: { Ahin: { score1: "2", score2: "1", winner: "Bosnia and Herzegovina" }, Sifat: { score1: "2",
+                    score2: "0", winner: "Bosnia and Herzegovina" }, Tamim: { score1: "1", score2: "1",
+                    winner: "Draw" } },
+            50: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "0", score2: "1",
+                    winner: "Canada" }, Tamim: { score1: "1", score2: "2", winner: "Canada" } },
+            51: { Ahin: { score1: "2", score2: "0", winner: "Morocco" }, Sifat: { score1: "3", score2: "0",
+                    winner: "Morocco" }, Tamim: { score1: "3", score2: "0", winner: "Morocco" } },
+            52: { Ahin: { score1: "0", score2: "3", winner: "Brazil" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Brazil" }, Tamim: { score1: "1", score2: "2", winner: "Brazil" } },
+            53: { Ahin: { score1: "1", score2: "2", winner: "Mexico" }, Sifat: { score1: "1", score2: "2",
+                    winner: "Mexico" }, Tamim: { score1: "1", score2: "2", winner: "Mexico" } },
+            54: { Ahin: { score1: "0", score2: "2", winner: "South Korea" }, Sifat: { score1: "0", score2: "2",
+                    winner: "South Korea" }, Tamim: { score1: "1", score2: "2", winner: "South Korea" } },
+            55: { Ahin: { score1: "0", score2: "2", winner: "Ivory Coast" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Ivory Coast" }, Tamim: { score1: "0", score2: "2", winner: "Ivory Coast" } },
+            56: { Ahin: { score1: "0", score2: "3", winner: "Germany" }, Sifat: { score1: "1", score2: "3",
+                    winner: "Germany" }, Tamim: { score1: "1", score2: "2", winner: "Germany" } },
+            57: { Ahin: { score1: "2", score2: "1", winner: "Japan" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Japan" }, Tamim: { score1: "3", score2: "1", winner: "Japan" } },
+            58: { Ahin: { score1: "0", score2: "4", winner: "Netherlands" }, Sifat: { score1: "0", score2: "3",
+                    winner: "Netherlands" }, Tamim: { score1: "0", score2: "4", winner: "Netherlands" } },
+            59: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "0", score2: "1",
+                    winner: "Australia" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            60: { Ahin: { score1: "0", score2: "2", winner: "USA" }, Sifat: { score1: "0", score2: "2",
+                    winner: "USA" }, Tamim: { score1: "0", score2: "2", winner: "USA" } },
+            61: { Ahin: { score1: "2", score2: "3", winner: "France" }, Sifat: { score1: "1", score2: "3",
+                    winner: "France" }, Tamim: { score1: "1", score2: "2", winner: "France" } },
+            62: { Ahin: { score1: "2", score2: "1", winner: "Senegal" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Senegal" }, Tamim: { score1: "2", score2: "1", winner: "Senegal" } },
+            63: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "0",
+                    winner: "Cape Verde" }, Tamim: { score1: "1", score2: "0", winner: "Cape Verde" } },
+            64: { Ahin: { score1: "0", score2: "3", winner: "Spain" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Spain" }, Tamim: { score1: "0", score2: "2", winner: "Spain" } },
+            65: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "2", score2: "1",
+                    winner: "Egypt" }, Tamim: { score1: "1", score2: "2", winner: "Iran" } },
+            66: { Ahin: { score1: "0", score2: "2", winner: "Belgium" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Belgium" }, Tamim: { score1: "0", score2: "1", winner: "Belgium" } },
+            67: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "1", score2: "1", winner: "Draw" } },
+            68: { Ahin: { score1: "1", score2: "3", winner: "England" }, Sifat: { score1: "1", score2: "4",
+                    winner: "England" }, Tamim: { score1: "1", score2: "4", winner: "England" } },
+            69: { Ahin: { score1: "1", score2: "2", winner: "Portugal" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Portugal" }, Tamim: { score1: "2", score2: "1", winner: "Colombia" } },
+            70: { Ahin: { score1: "1", score2: "1", winner: "Draw" }, Sifat: { score1: "1", score2: "1",
+                    winner: "Draw" }, Tamim: { score1: "0", score2: "0", winner: "Draw" } },
+            71: { Ahin: { score1: "0", score2: "2", winner: "Austria" }, Sifat: { score1: "0", score2: "2",
+                    winner: "Austria" }, Tamim: { score1: "0", score2: "2", winner: "Austria" } },
+            72: { Ahin: { score1: "0", score2: "3", winner: "Argentina" }, Sifat: { score1: "0", score2: "3",
+                    winner: "Argentina" }, Tamim: { score1: "0", score2: "2", winner: "Argentina" } },
+        };
+
+        const SAVED_RESULTS = {
+            1: { winner: "Mexico", score1: "2", score2: "0" },
+            2: { winner: "South Korea", score1: "2", score2: "1" },
+            3: { winner: "Draw", score1: "1", score2: "1" },
+            4: { winner: "USA", score1: "4", score2: "1" },
+            5: { winner: "Draw", score1: "1", score2: "1" },
+            6: { winner: "Draw", score1: "1", score2: "1" },
+            7: { winner: "Scotland", score1: "0", score2: "1" },
+            8: { winner: "Australia", score1: "2", score2: "0" },
+            9: { winner: "Germany", score1: "7", score2: "1" },
+            10: { winner: "Draw", score1: "2", score2: "2" },
+            11: { winner: "Sweden", score1: "5", score2: "1" },
+            12: { winner: "Ivory Coast", score1: "1", score2: "0" },
+            13: { winner: "Draw", score1: "0", score2: "0" },
+            14: { winner: "Draw", score1: "1", score2: "1" },
+            15: { winner: "Draw", score1: "2", score2: "2" },
+            16: { winner: "Draw", score1: "1", score2: "1" },
+            17: { winner: "France", score1: "3", score2: "1" },
+            18: { winner: "Norway", score1: "1", score2: "4" },
+            19: { winner: "Argentina", score1: "3", score2: "0" },
+            20: { winner: "Austria", score1: "3", score2: "1" },
+            21: { winner: "Draw", score1: "1", score2: "1" },
+            22: { winner: "England", score1: "4", score2: "2" },
+            23: { winner: "Ghana", score1: "1", score2: "0" },
+            24: { winner: "Colombia", score1: "1", score2: "3" },
+            25: { winner: "Draw", score1: "1", score2: "1" },
+            26: { winner: "Switzerland", score1: "4", score2: "1" },
+            27: { winner: "Canada", score1: "6", score2: "0" },
+            28: { winner: "Mexico", score1: "1", score2: "0" },
+            29: { winner: "USA", score1: "2", score2: "0" },
+            30: { winner: "Paraguay", score1: "0", score2: "1" },
+            31: { winner: "Morocco", score1: "0", score2: "1" },
+            32: { winner: "Brazil", score1: "3", score2: "0" },
+            33: { winner: "Netherlands", score1: "5", score2: "1" },
+            34: { winner: "Germany", score1: "2", score2: "1" },
+            35: { winner: "Draw", score1: "0", score2: "0" },
+            36: { winner: "Japan", score1: "0", score2: "4" },
+            37: { winner: "Spain", score1: "4", score2: "0" },
+            38: { winner: "Draw", score1: "0", score2: "0" },
+            39: { winner: "Egypt", score1: "1", score2: "3" },
+            40: { winner: "Draw", score1: "2", score2: "2" },
+            41: { winner: "Argentina", score1: "2", score2: "0" },
+            42: { winner: "France", score1: "3", score2: "0" },
+            43: { winner: "Norway", score1: "3", score2: "2" },
+            44: { winner: "Algeria", score1: "1", score2: "2" },
+            45: { winner: "Portugal", score1: "5", score2: "0" },
+            46: { winner: "Draw", score1: "0", score2: "0" },
+            47: { winner: "Croatia", score1: "0", score2: "1" },
+            48: { winner: "Colombia", score1: "1", score2: "0" },
+            49: { winner: "Bosnia and Herzegovina", score1: "3", score2: "1" },
+            50: { winner: "Switzerland", score1: "2", score2: "1" },
+            51: { winner: "Morocco", score1: "4", score2: "2" },
+            52: { winner: "Brazil", score1: "0", score2: "3" },
+            53: { winner: "Mexico", score1: "0", score2: "3" },
+            54: { winner: "South Africa", score1: "1", score2: "0" },
+            55: { winner: "Ivory Coast", score1: "0", score2: "2" },
+            56: { winner: "Ecuador", score1: "2", score2: "1" },
+            57: { winner: "Draw", score1: "1", score2: "1" },
+            58: { winner: "Netherlands", score1: "1", score2: "3" },
+            59: { winner: "Draw", score1: "0", score2: "0" },
+            60: { winner: "Türkiye", score1: "3", score2: "2" },
+            61: { winner: "France", score1: "1", score2: "4" },
+            62: { winner: "Senegal", score1: "5", score2: "0" },
+            63: { winner: "Draw", score1: "0", score2: "0" },
+            64: { winner: "Spain", score1: "0", score2: "1" },
+            65: { winner: "Draw", score1: "1", score2: "1" },
+            66: { winner: "Belgium", score1: "1", score2: "5" },
+            67: { winner: "Croatia", score1: "2", score2: "1" },
+            68: { winner: "England", score1: "0", score2: "2" },
+            69: { winner: "Draw", score1: "0", score2: "0" },
+            70: { winner: "DR Congo", score1: "3", score2: "1" },
+            71: { winner: "Draw", score1: "3", score2: "3" },
+            72: { winner: "Argentina", score1: "1", score2: "3" },
+        };
+
+        const SAVED_R32 = [
+            { id: 73, team1: "South Africa", team2: "Canada", predictions: { Ahin: { score1: "1", score2: "2",
+                        winner: "Canada" }, Sifat: { score1: "1", score2: "2", winner: "Canada" }, Tamim: { score1: "1",
+                        score2: "2", winner: "Canada" } }, result: { winner: "Canada", score1: "0", score2: "1" } },
+            { id: 74, team1: "Germany", team2: "Paraguay", predictions: { Ahin: { score1: "3", score2: "0",
+                        winner: "Germany" }, Sifat: { score1: "3", score2: "0", winner: "Germany" }, Tamim: { score1: "3",
+                        score2: "0", winner: "Germany" } }, result: { winner: "Paraguay", score1: "1",
+                    score2: "1" } },
+            { id: 75, team1: "Netherlands", team2: "Morocco", predictions: { Ahin: { score1: "2", score2: "1",
+                        winner: "Netherlands" }, Sifat: { score1: "3", score2: "1", winner: "Netherlands" },
+                    Tamim: { score1: "2", score2: "1", winner: "Netherlands" } }, result: { winner: "Morocco",
+                        score1: "1", score2: "1" } },
+            { id: 76, team1: "Brazil", team2: "Japan", predictions: { Ahin: { score1: "3", score2: "2",
+                        winner: "Brazil" }, Sifat: { score1: "3", score2: "1", winner: "Brazil" }, Tamim: { score1: "2",
+                        score2: "1", winner: "Brazil" } }, result: { winner: "Brazil", score1: "2",
+                    score2: "1" } },
+            { id: 77, team1: "France", team2: "Sweden", predictions: { Ahin: { score1: "3", score2: "1",
+                        winner: "France" }, Sifat: { score1: "3", score2: "1", winner: "France" }, Tamim: { score1: "4",
+                        score2: "0", winner: "France" } }, result: { winner: "France", score1: "3",
+                    score2: "0" } },
+            { id: 78, team1: "Ivory Coast", team2: "Norway", predictions: { Ahin: { score1: "1", score2: "1",
+                        winner: "Norway" }, Sifat: { score1: "0", score2: "1", winner: "Norway" }, Tamim: { score1: "0",
+                        score2: "1", winner: "Norway" } }, result: { winner: "Norway", score1: "1",
+                    score2: "2" } },
+            { id: 79, team1: "Mexico", team2: "Ecuador", predictions: { Ahin: { score1: "1", score2: "0",
+                        winner: "Mexico" }, Sifat: { score1: "2", score2: "1", winner: "Mexico" }, Tamim: { score1: "1",
+                        score2: "1", winner: "Mexico" } }, result: { winner: "Mexico", score1: "2",
+                    score2: "0" } },
+            { id: 80, team1: "England", team2: "DR Congo", predictions: { Ahin: { score1: "3", score2: "0",
+                        winner: "England" }, Sifat: { score1: "3", score2: "1", winner: "England" }, Tamim: { score1: "3",
+                        score2: "0", winner: "England" } }, result: { winner: "England", score1: "2",
+                    score2: "1" } },
+            { id: 81, team1: "USA", team2: "Bosnia and Herzegovina", predictions: { Ahin: { score1: "2", score2: "1",
+                        winner: "USA" }, Sifat: { score1: "2", score2: "1", winner: "USA" }, Tamim: { score1: "2",
+                        score2: "1", winner: "USA" } }, result: { winner: "USA", score1: "2", score2: "0" } },
+            { id: 82, team1: "Belgium", team2: "Senegal", predictions: { Ahin: { winner: "Belgium", score1: "1",
+                        score2: "1" }, Sifat: { winner: "Belgium", score1: "2", score2: "1" }, Tamim: { winner: "Belgium",
+                        score1: "2", score2: "1" } }, result: { winner: "Belgium", score1: "3", score2: "2" } },
+            { id: 83, team1: "Portugal", team2: "Croatia", predictions: { Ahin: { score1: "2", score2: "1",
+                        winner: "Portugal" }, Sifat: { score1: "2", score2: "1", winner: "Portugal" }, Tamim: { score1: "2",
+                        score2: "1", winner: "Portugal" } }, result: { winner: "Portugal", score1: "2",
+                    score2: "1" } },
+            { id: 84, team1: "Spain", team2: "Austria", predictions: { Ahin: { score1: "2", score2: "0",
+                        winner: "Spain" }, Sifat: { score1: "3", score2: "1", winner: "Spain" }, Tamim: { score1: "2",
+                        score2: "1", winner: "Spain" } }, result: { winner: "Spain", score1: "3", score2: "0" } },
+            { id: 85, team1: "Switzerland", team2: "Algeria", predictions: { Tamim: { score1: "2", score2: "0",
+                        winner: "Switzerland" }, Ahin: { score1: "1", score2: "0", winner: "Switzerland" },
+                    Sifat: { winner: "Switzerland", score1: "2", score2: "0" } }, result: { winner: "Switzerland",
+                        score1: "2", score2: "0" } },
+            { id: 86, team1: "Argentina", team2: "Cape Verde", predictions: { Ahin: { score1: "3", score2: "0",
+                        winner: "Argentina" }, Sifat: { score1: "3", score2: "1", winner: "Argentina" },
+                    Tamim: { score1: "2", score2: "0", winner: "Argentina" } }, result: { winner: "Argentina",
+                        score1: "3", score2: "2" } },
+            { id: 87, team1: "Colombia", team2: "Ghana", predictions: { Tamim: { score1: "1", score2: "0",
+                        winner: "Colombia" }, Sifat: { score1: "2", score2: "0", winner: "Colombia" }, Ahin: { score1: "2",
+                        score2: "0", winner: "Colombia" } }, result: { winner: "Colombia", score1: "1",
+                    score2: "0" } },
+            { id: 88, team1: "Australia", team2: "Egypt", predictions: { Ahin: { score1: "1", score2: "2",
+                        winner: "Egypt" }, Sifat: { score1: "1", score2: "2", winner: "Egypt" }, Tamim: { score1: "0",
+                        score2: "1", winner: "Egypt" } }, result: { winner: "Egypt", score1: "1", score2: "1" } },
+        ];
+
+        const SAVED_KNOCKOUT_REST = [
+            { id: 90, stage: "Round of 16", team1: "Canada", team2: "Morocco", predictions: { Ahin: { score1: "1",
+                        score2: "1", winner: "Morocco" }, Sifat: { score1: "1", score2: "2", winner: "Morocco" },
+                    Tamim: { score1: "1", score2: "2", winner: "Morocco" } }, result: { winner: "Morocco",
+                        score1: "0", score2: "3" } },
+            { id: 89, stage: "Round of 16", team1: "Paraguay", team2: "France", predictions: { Ahin: { score1: "0",
+                        score2: "3", winner: "France" }, Sifat: { score1: "0", score2: "3", winner: "France" },
+                    Tamim: { score1: "0", score2: "2", winner: "France" } }, result: { winner: "France",
+                        score1: "0", score2: "1" } },
+            { id: 91, stage: "Round of 16", team1: "Brazil", team2: "Norway", predictions: { Ahin: { score1: "2",
+                        score2: "1", winner: "Brazil" }, Sifat: { score1: "2", score2: "1", winner: "Brazil" },
+                    Tamim: { score1: "2", score2: "1", winner: "Brazil" } }, result: { winner: "Norway",
+                        score1: "1", score2: "2" } },
+            { id: 92, stage: "Round of 16", team1: "Mexico", team2: "England", predictions: { Ahin: { score1: "1",
+                        score2: "2", winner: "England" }, Sifat: { score1: "1", score2: "2", winner: "England" },
+                    Tamim: { score1: "1", score2: "1", winner: "Mexico" } }, result: { winner: "England",
+                        score1: "2", score2: "3" } },
+            { id: 94, stage: "Round of 16", team1: "USA", team2: "Belgium", predictions: { Ahin: { score1: "1",
+                        score2: "2", winner: "Belgium" }, Sifat: { score1: "2", score2: "1", winner: "USA" },
+                    Tamim: { score1: "2", score2: "1", winner: "USA" } }, result: { winner: "Belgium",
+                        score1: "2", score2: "4" } },
+            { id: 93, stage: "Round of 16", team1: "Portugal", team2: "Spain", predictions: { Ahin: { score1: "1",
+                        score2: "2", winner: "Spain" }, Sifat: { score1: "1", score2: "2", winner: "Spain" },
+                    Tamim: { score1: "1", score2: "2", winner: "Spain" } }, result: { winner: "Spain",
+                        score1: "0", score2: "1" } },
+            { id: 96, stage: "Round of 16", team1: "Switzerland", team2: "Colombia", predictions: { Ahin: { score1: "1",
+                        score2: "2", winner: "Colombia" }, Sifat: { score1: "1", score2: "2", winner: "Colombia" },
+                    Tamim: { score1: "0", score2: "1", winner: "Colombia" } }, result: { winner: "Switzerland",
+                        score1: "0", score2: "0" } },
+            { id: 95, stage: "Round of 16", team1: "Argentina", team2: "Egypt", predictions: { Ahin: { score1: "3",
+                        score2: "0", winner: "Argentina" }, Sifat: { score1: "3", score2: "0", winner: "Argentina" },
+                    Tamim: { score1: "3", score2: "0", winner: "Argentina" } }, result: { winner: "Argentina",
+                        score1: "3", score2: "2" } },
+            { id: 97, stage: "Quarter-final", team1: "France", team2: "Morocco", predictions: { Ahin: { score1: "2",
+                        score2: "1", winner: "France" }, Sifat: { score1: "2", score2: "1", winner: "France" },
+                    Tamim: { score1: "2", score2: "1", winner: "France" } }, result: { winner: "France",
+                        score1: "2", score2: "0" } },
+            { id: 99, stage: "Quarter-final", team1: "Norway", team2: "England", predictions: { Ahin: { score1: "2",
+                        score2: "3", winner: "England" }, Sifat: { score1: "1", score2: "2", winner: "England" },
+                    Tamim: { score1: "1", score2: "2", winner: "England" } }, result: { winner: "England",
+                        score1: "1", score2: "2" } },
+            { id: 98, stage: "Quarter-final", team1: "Spain", team2: "Belgium", predictions: { Ahin: { score1: "2",
+                        score2: "2", winner: "Spain" }, Sifat: { score1: "2", score2: "1", winner: "Spain" },
+                    Tamim: { score1: "3", score2: "1", winner: "Spain" } }, result: { winner: "Spain",
+                        score1: "2", score2: "1" } },
+            { id: 100, stage: "Quarter-final", team1: "Argentina", team2: "Switzerland", predictions: { Ahin: { score1: "2",
+                        score2: "0", winner: "Argentina" }, Sifat: { score1: "2", score2: "0", winner: "Argentina" },
+                    Tamim: { score1: "3", score2: "0", winner: "Argentina" } }, result: { winner: "Argentina",
+                        score1: "3", score2: "1" } },
+            { id: 101, stage: "Semi-final", team1: "France", team2: "Spain", predictions: { Ahin: { score1: "2",
+                        score2: "1", winner: "France" }, Sifat: { score1: "1", score2: "1", winner: "France" },
+                    Tamim: { score1: "3", score2: "4", winner: "Spain" } }, result: { winner: "Spain",
+                        score1: "0", score2: "2" } },
+            { id: 102, stage: "Semi-final", team1: "England", team2: "Argentina", predictions: { Ahin: { score1: "2",
+                        score2: "3", winner: "Argentina" }, Sifat: { score1: "2", score2: "1", winner: "England" },
+                    Tamim: { score1: "2", score2: "3", winner: "Argentina" } }, result: { winner: "Argentina",
+                        score1: "1", score2: "2" } },
+            { id: 103, stage: "3rd Place", team1: "France", team2: "England", predictions: { Ahin: { score1: "2",
+                        score2: "1", winner: "France" }, Sifat: { score1: "2", score2: "1", winner: "France" },
+                    Tamim: { score1: "2", score2: "1", winner: "France" } }, result: { winner: "England",
+                        score1: "4", score2: "6" } },
+            { id: 104, stage: "Final", team1: "Spain", team2: "Argentina", predictions: { Ahin: { score1: "1",
+                        score2: "2", winner: "Argentina" }, Sifat: { score1: "2", score2: "2", winner: "Argentina" },
+                    Tamim: { score1: "1", score2: "2", winner: "Argentina" } }, result: { winner: "Spain",
+                        score1: "1", score2: "0" } },
+        ];
+
+        const SAVED_AWARD_RESULTS = {
+            goldenBoot: { player: "Kylian Mbappe", team: "France" },
+            goldenBall: { player: "Rodri", team: "Spain" },
+            youngPlayer: { player: "Pau Cubarsi", team: "Spain" },
+            goldenGloves: { player: "Unai Simon", team: "Spain" },
+        };
+        const SAVED_STANDING_RESULTS = { champion: "Spain", runnerUp: "Argentina", third: "England" };
+
+        const SAVED_AWARD_PREDS = {
+            Ahin: { goldenBoot: { player: "Leo Messi", team: "Argentina" }, goldenBall: { player: "Leo Messi",
+                    team: "Argentina" }, youngPlayer: { player: "Lamine Yamal", team: "Spain" },
+                goldenGloves: { player: "Unai Simon", team: "Spain" } },
+            Sifat: { goldenBoot: { player: "Kylian Mbappe", team: "France" }, goldenBall: { player: "Kylian Mbappe",
+                    team: "France" }, youngPlayer: { player: "Lamine Yamal", team: "Spain" },
+                goldenGloves: { player: "Unai Simon", team: "Spain" } },
+            Tamim: { goldenBoot: { player: "Leo Messi", team: "Argentina" }, goldenBall: { player: "Leo Messi",
+                    team: "Argentina" }, youngPlayer: { player: "Pau Cubarsi", team: "Spain" },
+                goldenGloves: { player: "Unai Simon", team: "Spain" } },
+        };
+        const SAVED_STANDING_PREDS = {
+            Ahin: { champion: "Argentina", runnerUp: "France", third: "Spain" },
+            Sifat: { champion: "France", runnerUp: "England", third: "Spain" },
+            Tamim: { champion: "Argentina", runnerUp: "Spain", third: "France" },
+        };
+
+        /* ── Storage (localStorage) ── */
+        async function sRead() {
+            try {
+                const raw = localStorage.getItem(SK);
+                if (raw) {
+                    const d = JSON.parse(raw);
+                    if (d?.matches?.length >= 72) return { data: d };
+                    return { data: null, notFound: false, error: `data malformed (matches: ${d?.matches?.length ?? "none"})` };
+                }
+                return { data: null, notFound: true };
+            } catch (e) {
+                return { data: null, notFound: false, error: e?.message || String(e) };
+            }
+        }
+
+        async function sWrite(d) {
+            try {
+                localStorage.setItem(SK, JSON.stringify(d));
+                return true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        /* ── Points ── */
+        const BIG_STAGES = ["Semi-final", "3rd Place", "Final"];
+        const KNOCKOUT_STAGES = ["Round of 32", "Round of 16", "Quarter-final", "Semi-final", "3rd Place", "Final"];
+
+        function numEq(a, b) {
+            const na = Number(a),
+                nb = Number(b);
+            if (Number.isNaN(na) || Number.isNaN(nb)) return false;
+            return na === nb;
+        }
+
+        function isPredictedDraw(r) { return r?.score1 != null && r?.score2 != null && numEq(r.score1, r.score2); }
+
+        function calcPts(preds, result, stage) {
+            if (!result?.winner) return {};
+            const isBig = BIG_STAGES.includes(stage);
+            const isKO = KNOCKOUT_STAGES.includes(stage);
+            const winPt = isBig ? 2 : 1;
+            const exactPt = isBig ? 3 : 2;
+            const drawBonusPt = isBig ? 2.5 : 1.5;
+            const actualWasDrawScore = numEq(result.score1, result.score2);
+            return Object.fromEntries(PLAYERS.map(p => {
+                const r = preds?.[p];
+                if (!r?.winner) return [p, 0];
+                const ok = r.winner.trim().toLowerCase() === result.winner.trim().toLowerCase();
+                if (!ok) return [p, 0];
+                const exact = numEq(r.score1, result.score1) && numEq(r.score2, result.score2);
+                if (exact) return [p, exactPt];
+                if (isKO && isPredictedDraw(r) && actualWasDrawScore) return [p, drawBonusPt];
+                return [p, winPt];
+            }));
+        }
+
+        const AWARD_KEYS = ["goldenBoot", "goldenBall", "youngPlayer", "goldenGloves"];
+        const AWARD_LABELS = { goldenBoot: "⚽ Golden Boot", goldenBall: "🌟 Golden Ball", youngPlayer: "🚀 Young Player",
+            goldenGloves: "🧤 Golden Gloves" };
+        const STANDING_KEYS = ["champion", "runnerUp", "third"];
+        const STANDING_LABELS = { champion: "🏆 Champion", runnerUp: "🥈 Runner-up", third: "🥉 3rd Place" };
+
+        function calcAwardPts(awardPreds, awards) {
+            const out = {};
+            PLAYERS.forEach(p => {
+                const perAward = {};
+                AWARD_KEYS.forEach(key => {
+                    const guess = awardPreds?.[p]?.[key];
+                    const actual = awards?.[key];
+                    const guessPlayer = guess?.player?.trim();
+                    const actualPlayer = actual?.player?.trim();
+                    const guessTeam = guess?.team?.trim();
+                    const actualTeam = actual?.team?.trim();
+                    if (!guessPlayer || !actualPlayer) { perAward[key] = 0; return; }
+                    if (guessPlayer.toLowerCase() === actualPlayer.toLowerCase()) perAward[key] = 2;
+                    else if (guessTeam && actualTeam && guessTeam.toLowerCase() === actualTeam.toLowerCase())
+                    perAward[key] = 1;
+                    else perAward[key] = 0;
+                });
+                const ballBootBonus = (perAward.goldenBall === 2 && perAward.goldenBoot === 2) ? 3 : 0;
+                const total = Object.values(perAward).reduce((a, b) => a + b, 0) + ballBootBonus;
+                out[p] = { perAward, total, ballBootBonus };
+            });
+            return out;
+        }
+
+        function calcStandingPts(standingPreds, standings) {
+            const out = {};
+            PLAYERS.forEach(p => {
+                const perSlot = {};
+                let correctCount = 0;
+                STANDING_KEYS.forEach(key => {
+                    const guess = standingPreds?.[p]?.[key]?.trim();
+                    const actual = standings?.[key]?.trim();
+                    if (!guess || !actual) { perSlot[key] = 0; return; }
+                    if (guess.toLowerCase() === actual.toLowerCase()) { perSlot[key] = 2;
+                        correctCount++; } else perSlot[key] = 0;
+                });
+                const bonus = correctCount >= 2 ? 3 : 0;
+                const total = Object.values(perSlot).reduce((a, b) => a + b, 0) + bonus;
+                out[p] = { perSlot, total, bonus, correctCount };
+            });
+            return out;
+        }
+
+        const HOST_ACCENTS = ["#ff2d2d", "#00a859", "#0057b8"];
+        const FLAG = {
+            "Mexico": "🇲🇽",
+            "South Africa": "🇿🇦",
+            "South Korea": "🇰🇷",
+            "Czechia": "🇨🇿",
+            "Canada": "🇨🇦",
+            "Bosnia and Herzegovina": "🇧🇦",
+            "USA": "🇺🇸",
+            "Paraguay": "🇵🇾",
+            "Qatar": "🇶🇦",
+            "Switzerland": "🇨🇭",
+            "Brazil": "🇧🇷",
+            "Morocco": "🇲🇦",
+            "Haiti": "🇭🇹",
+            "Scotland": "🏴",
+            "Australia": "🇦🇺",
+            "Türkiye": "🇹🇷",
+            "Germany": "🇩🇪",
+            "Curaçao": "🇨🇼",
+            "Netherlands": "🇳🇱",
+            "Japan": "🇯🇵",
+            "Sweden": "🇸🇪",
+            "Tunisia": "🇹🇳",
+            "Ivory Coast": "🇨🇮",
+            "Ecuador": "🇪🇨",
+            "Spain": "🇪🇸",
+            "Cape Verde": "🇨🇻",
+            "Belgium": "🇧🇪",
+            "Egypt": "🇪🇬",
+            "Iran": "🇮🇷",
+            "New Zealand": "🇳🇿",
+            "Saudi Arabia": "🇸🇦",
+            "Uruguay": "🇺🇾",
+            "France": "🇫🇷",
+            "Senegal": "🇸🇳",
+            "Iraq": "🇮🇶",
+            "Norway": "🇳🇴",
+            "Argentina": "🇦🇷",
+            "Algeria": "🇩🇿",
+            "Austria": "🇦🇹",
+            "Jordan": "🇯🇴",
+            "Portugal": "🇵🇹",
+            "DR Congo": "🇨🇩",
+            "England": "🏴",
+            "Croatia": "🇭🇷",
+            "Ghana": "🇬🇭",
+            "Panama": "🇵🇦",
+            "Uzbekistan": "🇺🇿",
+            "Colombia": "🇨🇴",
+        };
+
+        function flagOf(team) { return FLAG[team] || "⚽"; }
+
+        /* ══ BRACKET LOGIC ══ */
+        const THIRD_PLACE_COMBO = {
+            EFGHIJKL: "EJIFHGLK",
+            DFGHIJKL: "HGIDJFLK",
+            DEGHIJKL: "EJIDHGLK",
+            DEFHIJKL: "EJIDHFLK",
+            DEFGIJKL: "EGIDJFLK",
+            DEFGHJKL: "EGIDJHLK",
+            DEFGHIKL: "EGIDJFLK",
+            DEFGHIJL: "EGIDJFLK",
+            DEFGHIJK: "EGIDJFLK",
+            ABCDEFGH: "AEBFCDGH",
+            ABCDEFGI: "AEBFCDGI",
+            ABCDEFGJ: "AEBFCDGJ",
+            ABCDEFGK: "AEBFCDGK",
+            ABCDEFGL: "AEBFCDGL",
+        };
+        const R32_TEMPLATE = [
+            { m: 73, a: { t: "R", g: "A" }, b: { t: "R", g: "B" } },
+            { m: 74, a: { t: "W", g: "E" }, b: { t: "T", g: "ABCDF" } },
+            { m: 75, a: { t: "W", g: "F" }, b: { t: "R", g: "C" } },
+            { m: 76, a: { t: "W", g: "C" }, b: { t: "R", g: "F" } },
+            { m: 77, a: { t: "W", g: "I" }, b: { t: "T", g: "CDFGH" } },
+            { m: 78, a: { t: "R", g: "E" }, b: { t: "R", g: "I" } },
+            { m: 79, a: { t: "W", g: "A" }, b: { t: "T", g: "CEFHI" } },
+            { m: 80, a: { t: "W", g: "L" }, b: { t: "T", g: "EHIJK" } },
+            { m: 81, a: { t: "W", g: "D" }, b: { t: "T", g: "BEFIJ" } },
+            { m: 82, a: { t: "W", g: "G" }, b: { t: "T", g: "AEHIJ" } },
+            { m: 83, a: { t: "R", g: "K" }, b: { t: "R", g: "L" } },
+            { m: 84, a: { t: "W", g: "H" }, b: { t: "R", g: "J" } },
+            { m: 85, a: { t: "W", g: "B" }, b: { t: "T", g: "EFGIJ" } },
+            { m: 86, a: { t: "W", g: "J" }, b: { t: "R", g: "H" } },
+            { m: 87, a: { t: "W", g: "K" }, b: { t: "T", g: "DEIJL" } },
+            { m: 88, a: { t: "R", g: "D" }, b: { t: "R", g: "G" } },
+        ];
+        const R16_TEMPLATE = [
+            { m: 89, src: [74, 77] }, { m: 90, src: [73, 75] }, { m: 91, src: [76, 78] }, { m: 92, src: [79,
+                80] },
+            { m: 93, src: [83, 84] }, { m: 94, src: [81, 82] }, { m: 95, src: [86, 88] }, { m: 96, src: [85,
+                87] },
+        ];
+        const QF_TEMPLATE = [
+            { m: 97, src: [89, 90] }, { m: 98, src: [93, 94] }, { m: 99, src: [91, 92] }, { m: 100, src: [95,
+                96] },
+        ];
+        const SF_TEMPLATE = [{ m: 101, src: [97, 98] }, { m: 102, src: [99, 100] }];
+        const ALL_GROUP_LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+
+        function computeGroupTable(matches, group) {
+            const gMatches = matches.filter(m => m.stage === "Group Stage" && m.group === group);
+            const teams = [...new Set(gMatches.flatMap(m => [m.team1, m.team2]))];
+            const stats = Object.fromEntries(teams.map(t => [t, { team: t, P: 0, W: 0, D: 0, L: 0, GF: 0, GA: 0,
+                    GD: 0, Pts: 0 }]));
+            let playedCount = 0;
+            gMatches.forEach(m => {
+                if (!m.result?.winner) return;
+                playedCount++;
+                const s1 = Number(m.result.score1),
+                    s2 = Number(m.result.score2);
+                const t1 = stats[m.team1],
+                    t2 = stats[m.team2];
+                t1.P++;
+                t2.P++;
+                t1.GF += s1;
+                t1.GA += s2;
+                t2.GF += s2;
+                t2.GA += s1;
+                if (s1 > s2) { t1.W++;
+                    t1.Pts += 3;
+                    t2.L++; } else if (s2 > s1) { t2.W++;
+                    t2.Pts += 3;
+                    t1.L++; } else { t1.D++;
+                    t2.D++;
+                    t1.Pts += 1;
+                    t2.Pts += 1; }
+            });
+            teams.forEach(t => { stats[t].GD = stats[t].GF - stats[t].GA; });
+            const table = teams.map(t => stats[t]).sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF || a
+                .team.localeCompare(b.team));
+            const totalMatches = gMatches.length;
+            return { table, complete: playedCount === totalMatches && totalMatches > 0 };
+        }
+
+        function computeAllGroupTables(matches) {
+            const out = {};
+            ALL_GROUP_LETTERS.forEach(g => { out[g] = computeGroupTable(matches, g); });
+            return out;
+        }
+
+        function rankThirdPlace(groupTables) {
+            const thirds = ALL_GROUP_LETTERS.map(g => {
+                const t = groupTables[g].table[2];
+                return t ? { ...t, group: g } : null;
+            }).filter(Boolean);
+            thirds.sort((a, b) => b.Pts - a.Pts || b.GD - a.GD || b.GF - a.GF || a.group.localeCompare(b.group));
+            return thirds;
+        }
+
+        function allGroupsComplete(groupTables) {
+            return ALL_GROUP_LETTERS.every(g => groupTables[g].complete);
+        }
+
+        function resolveR32(matches) {
+            const groupTables = computeAllGroupTables(matches);
+            if (!allGroupsComplete(groupTables)) return null;
+            const winnerOf = g => groupTables[g].table[0].team;
+            const runnerUpOf = g => groupTables[g].table[1].team;
+            const thirdsRanked = rankThirdPlace(groupTables);
+            const qualifyingThirds = thirdsRanked.slice(0, 8);
+            const qualifyingGroups = qualifyingThirds.map(t => t.group).sort().join("");
+            const comboSlots = THIRD_PLACE_COMBO[qualifyingGroups];
+            if (!comboSlots) return null;
+            const slotOrder = ["A", "B", "D", "E", "G", "I", "K", "L"];
+            const thirdForWinnerGroup = {};
+            slotOrder.forEach((winnerGroup, idx) => { thirdForWinnerGroup[winnerGroup] = comboSlots[idx]; });
+            const thirdTeamByGroup = Object.fromEntries(qualifyingThirds.map(t => [t.group, t.team]));
+
+            function resolveMatch({ a, b }) {
+                function resolve(slot, otherSlot) {
+                    if (slot.t === "W") return winnerOf(slot.g);
+                    if (slot.t === "R") return runnerUpOf(slot.g);
+                    if (slot.t === "T") {
+                        const winnerGroup = otherSlot.g;
+                        const thirdGroup = thirdForWinnerGroup[winnerGroup];
+                        return thirdTeamByGroup[thirdGroup];
+                    }
+                    return null;
+                }
+                return [resolve(a, b), resolve(b, a)];
+            }
+            return R32_TEMPLATE.map(({ m, a, b }) => {
+                const [team1, team2] = resolveMatch({ a, b });
+                return { id: m, stage: "Round of 32", team1, team2 };
+            });
+        }
+
+        function autoAdvanceBracket(matches) {
+            let result = [...matches];
+            const byId = id => result.find(m => m.id === id);
+            const exists = id => result.some(m => m.id === id);
+            const winnerOfMatch = id => {
+                const m = byId(id);
+                if (!m?.result?.winner || m.result.winner === "Draw") return null;
+                return m.result.winner;
+            };
+            const loserOfMatch = id => {
+                const m = byId(id);
+                if (!m?.result?.winner || m.result.winner === "Draw") return null;
+                return m.result.winner === m.team1 ? m.team2 : m.team1;
+            };
+            if (!exists(73)) {
+                const r32 = resolveR32(result);
+                if (r32) r32.forEach(match => { if (match.team1 && match.team2) result.push({ ...match,
+                        predictions: {}, result: null }); });
+            }
+
+            function tryBuildRound(template, stageName, useLosers = false) {
+                template.forEach(({ m, src }) => {
+                    if (exists(m)) return;
+                    const [s1, s2] = src;
+                    const team1 = useLosers ? loserOfMatch(s1) : winnerOfMatch(s1);
+                    const team2 = useLosers ? loserOfMatch(s2) : winnerOfMatch(s2);
+                    if (team1 && team2) result.push({ id: m, stage: stageName, team1, team2, predictions: {},
+                        result: null });
+                });
+            }
+            tryBuildRound(R16_TEMPLATE, "Round of 16");
+            tryBuildRound(QF_TEMPLATE, "Quarter-final");
+            tryBuildRound(SF_TEMPLATE, "Semi-final");
+            if (!exists(103)) {
+                const t1 = loserOfMatch(101),
+                    t2 = loserOfMatch(102);
+                if (t1 && t2) result.push({ id: 103, stage: "3rd Place", team1: t1, team2: t2, predictions: {},
+                    result: null });
+            }
+            if (!exists(104)) {
+                const t1 = winnerOfMatch(101),
+                    t2 = winnerOfMatch(102);
+                if (t1 && t2) result.push({ id: 104, stage: "Final", team1: t1, team2: t2, predictions: {},
+                    result: null });
+            }
+            return result;
+        }
+
+        const ALL_TEAMS = [...new Set(BASE_MATCHES.flatMap(m => [m.team1, m.team2]))].sort();
+
+        /* ── TeamInput ── */
+        function TeamInput({ value, onChange, placeholder }) {
+            const [q, setQ] = useState(value || "");
+            const [open, setOpen] = useState(false);
+            const ref = useRef();
+            useEffect(() => { setQ(value || ""); }, [value]);
+            useEffect(() => {
+                const fn = e => { if (!ref.current?.contains(e.target)) setOpen(false); };
+                document.addEventListener("mousedown", fn);
+                return () => document.removeEventListener("mousedown", fn);
+            }, []);
+            const opts = q.length > 0 ? ALL_TEAMS.filter(t => t.toLowerCase().includes(q.toLowerCase())).slice(0, 8) :
+            [];
+            const S = {
+                inp: { width: "100%", background: "#1c1810", border: "1px solid #3a3526", borderRadius: 8,
+                    padding: "9px 12px", color: "#e8e2cf", fontSize: 14 },
+                drop: { position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "#1c1810",
+                    border: "1px solid #3a3526", borderRadius: 8, zIndex: 30, maxHeight: 200, overflowY: "auto",
+                    boxShadow: "0 10px 24px rgba(0,0,0,.5)" },
+                dropRow: { padding: "9px 12px", fontSize: 13, color: "#e8e2cf", cursor: "pointer" },
+            };
+            return (
+                <div ref={ref} style={{ position: "relative", flex: 1 }}>
+                    <input className="pc-input" style={S.inp} value={q} placeholder={placeholder} autoComplete="off"
+                        onChange={e => { setQ(e.target.value);
+                            onChange(e.target.value);
+                            setOpen(true); }}
+                        onFocus={() => setOpen(true)} />
+                    {open && opts.length > 0 && (
+                        <div style={S.drop}>
+                            {opts.map(t => (
+                                <div key={t} className="pc-drop-row" style={S.dropRow}
+                                    onMouseDown={e => { e.preventDefault();
+                                        setQ(t);
+                                        onChange(t);
+                                        setOpen(false); }}>
+                                    {flagOf(t)} {t}
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           STYLES (inline object)
+           ═══════════════════════════════════════════════════════════════ */
+        const S = {
+            page: { minHeight: "100vh", background: "#0c0a06", color: "#e8e2cf", fontFamily: "var(--font-body)",
+                paddingBottom: 40, position: "relative", overflow: "hidden" },
+            colorStrip: { position: "fixed", top: 0, left: 0, right: 0, height: 3,
+                background: "linear-gradient(90deg,#ff2d2d,#ffd54a,#00a859,#0057b8,#ff2d2d)", backgroundSize: "200% auto",
+                zIndex: 50 },
+            sparkle: { position: "fixed", color: "#ffd54a55", fontSize: 14, zIndex: 1, pointerEvents: "none" },
+            toast: { position: "fixed", top: 14, left: "50%", transform: "translateX(-50%)", background: "#1c1810",
+                border: "1px solid #ffd54a55", color: "#ffd54a", padding: "10px 18px", borderRadius: 30, fontSize: 13,
+                fontWeight: 700, zIndex: 200, boxShadow: "0 8px 24px rgba(0,0,0,.5)" },
+            header: { position: "relative", padding: "20px 16px 14px",
+                background: "linear-gradient(180deg,#151109,#0c0a06)", borderBottom: "1px solid #221d12",
+                overflow: "hidden" },
+            stadiumSweep: { position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
+                background: "linear-gradient(100deg,transparent,rgba(255,213,74,.06),transparent)" },
+            deco: { position: "absolute", opacity: 0.5, pointerEvents: "none" },
+            hTopRow: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 },
+            h26: { display: "flex", alignItems: "center", gap: 10 },
+            h26Num: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 40, lineHeight: 1,
+                background: "linear-gradient(90deg,#ffd54a,#fff7d6,#ffd54a)", backgroundClip: "text",
+                WebkitBackgroundClip: "text", color: "transparent" },
+            h26Text: {},
+            h26Title: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 15, letterSpacing: 1,
+                color: "#fff" },
+            h26Sub: { fontSize: 9.5, color: "#9a8454", letterSpacing: 1.2, fontWeight: 600, textTransform: "uppercase",
+                marginTop: 1 },
+            trophyIcon: { fontSize: 30 },
+            hBottomRow: { display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 },
+            hNames: { fontSize: 12, color: "#9a9488", fontWeight: 600 },
+            adminPill: { background: "#5a1818", color: "#fca5a5", border: "1px solid #7a2828", padding: "5px 11px",
+                borderRadius: 20, fontSize: 11, fontWeight: 700, cursor: "pointer" },
+            loginPill: { background: "#1c1810", color: "#d9b65c", border: "1px solid #3a3526", padding: "5px 11px",
+                borderRadius: 20, fontSize: 11, fontWeight: 700, cursor: "pointer" },
+            lbBar: { display: "flex", gap: 6, flexWrap: "wrap" },
+            lbChip: { display: "flex", alignItems: "center", fontSize: 12, background: "#161209",
+                border: "1px solid", borderRadius: 20, padding: "5px 10px", color: "#e8e2cf" },
+            chipPt: { marginLeft: 5, color: "#ffd54a", fontWeight: 800, fontFamily: "var(--font-mono)" },
+            nav: { position: "relative", display: "flex", overflowX: "auto", background: "#100d08",
+                borderBottom: "1px solid #221d12", padding: "0 4px" },
+            navBtn: { flex: "1 0 auto", background: "none", border: "none", color: "#6b6450", padding: "10px 8px",
+                fontSize: 10.5, fontWeight: 700, cursor: "pointer", textAlign: "center", minWidth: 62,
+                textTransform: "uppercase", letterSpacing: 0.3 },
+            navOn: { color: "#ffd54a" },
+            navUnderline: { position: "absolute", bottom: 0, height: 2, background: "#ffd54a", borderRadius: 2,
+                transition: "left .25s cubic-bezier(.2,.8,.3,1), width .25s cubic-bezier(.2,.8,.3,1)" },
+            main: { maxWidth: 640, margin: "0 auto", padding: "16px 12px" },
+            searchWrap: { position: "relative", marginBottom: 12 },
+            searchIcon: { position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 13,
+                opacity: 0.5 },
+            searchInp: { width: "100%", background: "#161209", border: "1px solid #2e2818", borderRadius: 10,
+                padding: "10px 34px", color: "#e8e2cf", fontSize: 13 },
+            searchClear: { position: "absolute", right: 8, top: "50%", transform: "translateY(-50%)",
+                background: "none", border: "none", color: "#6b6450", fontSize: 14, cursor: "pointer", padding: 4 },
+            grpBtn: { background: "#161209", border: "1px solid #2e2818", color: "#9a9488", padding: "6px 11px",
+                borderRadius: 20, fontSize: 11.5, fontWeight: 700, cursor: "pointer" },
+            grpBtnOn: { background: "#ffd54a", color: "#1a1408", borderColor: "#ffd54a" },
+            empty: { textAlign: "center", padding: "40px 0" },
+            stageHd: { fontFamily: "var(--font-display)", fontWeight: 800, color: "#ffd54a", fontSize: 13,
+                letterSpacing: 0.5, margin: "20px 0 10px", textTransform: "uppercase" },
+            card: { background: "#161209", border: "1px solid #241f12", borderRadius: 14 },
+            matchCard: { background: "#161209", border: "1px solid #241f12", borderRadius: 14, padding: 14,
+                marginBottom: 10 },
+            matchTop: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
+            matchStageTag: { fontSize: 10, color: "#c9a13b", fontWeight: 700, textTransform: "uppercase",
+                letterSpacing: 0.4 },
+            matchTeams: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 },
+            teamBlock: { flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 4,
+                textAlign: "center" },
+            teamFlag: { fontSize: 22 },
+            teamName: { fontSize: 12.5, fontWeight: 700, color: "#fff", lineHeight: 1.2 },
+            vsScore: { minWidth: 64, textAlign: "center" },
+            scoreText: { fontFamily: "var(--font-mono)", fontWeight: 800, fontSize: 20, color: "#ffd54a" },
+            vsText: { fontFamily: "var(--font-mono)", fontWeight: 700, fontSize: 13, color: "#4a4330" },
+            matchBtnRow: { display: "flex", gap: 8, marginTop: 12 },
+            smallBtn: { flex: 1, background: "#1c1810", border: "1px solid #3a3526", color: "#d9b65c",
+                padding: "8px 6px", borderRadius: 8, fontSize: 11.5, fontWeight: 700, cursor: "pointer" },
+            smallBtnDone: { background: "#1a4d2e", borderColor: "#2a6d3e", color: "#4ade80" },
+            iconBtn: { background: "#1c1810", border: "1px solid #3a3526", color: "#9a9488", padding: "8px 10px",
+                borderRadius: 8, fontSize: 12, cursor: "pointer" },
+            predsStrip: { fontSize: 11, color: "#6b6450", marginTop: 8, display: "flex", flexWrap: "wrap",
+            gap: 8 },
+            veilBg: { position: "fixed", inset: 0, background: "rgba(6,5,3,.78)", display: "flex",
+                alignItems: "flex-end", justifyContent: "center", zIndex: 100, backdropFilter: "blur(2px)" },
+            veilCard: { background: "#161209", border: "1px solid #2e2818", borderTopLeftRadius: 20,
+                borderTopRightRadius: 20, padding: 20, width: "100%", maxWidth: 480, maxHeight: "88vh",
+                overflowY: "auto" },
+            mh: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 17, color: "#fff", margin: "0 0 4px" },
+            inp: { width: "100%", background: "#1c1810", border: "1px solid #3a3526", borderRadius: 8,
+                padding: "9px 12px", color: "#e8e2cf", fontSize: 14 },
+            sel: { width: "100%", background: "#1c1810", border: "1px solid #3a3526", borderRadius: 8,
+                padding: "9px 12px", color: "#e8e2cf", fontSize: 13 },
+            drop: { position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, background: "#1c1810",
+                border: "1px solid #3a3526", borderRadius: 8, zIndex: 30, maxHeight: 200, overflowY: "auto",
+                boxShadow: "0 10px 24px rgba(0,0,0,.5)" },
+            dropRow: { padding: "9px 12px", fontSize: 13, color: "#e8e2cf", cursor: "pointer" },
+            row: { display: "flex", gap: 10, marginTop: 6 },
+            cancelBtn: { background: "#1c1810", border: "1px solid #3a3526", color: "#9a9488", padding: "11px 16px",
+                borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer" },
+            goldBtn: { background: "linear-gradient(180deg,#ffe9a8,#ffd54a)", color: "#1a1408", border: "none",
+                padding: "11px 16px", borderRadius: 10, fontSize: 13, fontWeight: 800, cursor: "pointer" },
+            redBtn: { background: "#5a1818", color: "#fca5a5", border: "1px solid #7a2828", padding: "11px 16px",
+                borderRadius: 10, fontSize: 13, fontWeight: 700, cursor: "pointer" },
+            xBtn: { background: "#1c1810", border: "1px solid #3a3526", color: "#9a9488", width: 30, height: 30,
+                borderRadius: 8, fontSize: 13, cursor: "pointer" },
+            err: { color: "#fca5a5", fontSize: 12, margin: "8px 0 0" },
+            histRow: { display: "flex", alignItems: "center", gap: 10, padding: "10px 0",
+                borderBottom: "1px solid #221d12" },
+            ptBadge: { padding: "3px 8px", borderRadius: 20, fontSize: 11, fontWeight: 800,
+            fontFamily: "var(--font-mono)" },
+            secH: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 18, color: "#fff",
+            margin: "0 0 14px" },
+            lbRow: { display: "flex", alignItems: "center", background: "#161209", border: "1px solid #241f12",
+                borderLeft: "3px solid", borderRadius: 12, padding: "12px 14px", marginBottom: 8 },
+            lbGold: { background: "#1c1810", borderColor: "#3a3526" },
+            aBtn: { background: "#1c1810", border: "1px solid #3a3526", color: "#d9b65c", padding: "5px 10px",
+                borderRadius: 8, fontSize: 11, fontWeight: 700, cursor: "pointer" },
+            ta: { width: "100%", minHeight: 100, background: "#1c1810", border: "1px solid #3a3526", borderRadius: 8,
+                padding: 10, color: "#9a9488", fontSize: 10.5, fontFamily: "var(--font-mono)",
+            resize: "vertical" },
+            tip: { fontSize: 11.5, color: "#6b6450", marginTop: 14, lineHeight: 1.6, textAlign: "center" },
+            footer: { textAlign: "center", fontSize: 11, color: "#4a4330", padding: "24px 0 8px" },
+            verifyRow: { display: "flex", flexDirection: "column", gap: 2, padding: "10px 0",
+                borderBottom: "1px solid #221d12" },
+            loadRing: { position: "relative", width: 74, height: 74, display: "flex", alignItems: "center",
+                justifyContent: "center", borderRadius: "50%" },
+            loadRingBorder: { position: "absolute", inset: 0, border: "3px solid #2e2818",
+                borderTopColor: "#ffd54a", borderRadius: "50%" },
+            loadBall: { fontSize: 26 },
+            loadBarTrack: { width: 160, height: 3, background: "#1c1810", borderRadius: 4, marginTop: 18,
+                overflow: "hidden", position: "relative" },
+            loadBarFill: { position: "absolute", top: 0, left: 0, width: "40%", height: "100%",
+                background: "linear-gradient(90deg,transparent,#ffd54a,transparent)" },
+            podiumOuter: { position: "relative", marginBottom: 20 },
+            podiumGroundGlow: { position: "absolute", bottom: 0, left: "10%", right: "10%", height: 40,
+                background: "radial-gradient(ellipse at center,rgba(255,213,74,.15),transparent 70%)" },
+            podiumWrap: { display: "flex", alignItems: "flex-end", justifyContent: "center", gap: 10,
+                position: "relative", padding: "20px 0 0" },
+            podiumCol: { display: "flex", flexDirection: "column", alignItems: "center", width: 92,
+                position: "relative" },
+            confettiWrap: { position: "absolute", top: -14, left: 0, right: 0, height: 30, overflow: "hidden",
+                pointerEvents: "none" },
+            confettiBit: { position: "absolute", top: 0, width: 5, height: 9, borderRadius: 1 },
+            podiumMedal: { fontSize: 28, marginBottom: 4 },
+            podiumName: { fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 12.5, color: "#fff" },
+            podiumPts: { fontFamily: "var(--font-display)", fontWeight: 800, fontSize: 15, color: "#ffd54a",
+                marginBottom: 6 },
+            podiumBase: { width: "100%", borderRadius: "8px 8px 0 0", position: "relative",
+                display: "flex", alignItems: "flex-start", justifyContent: "center", paddingTop: 8,
+                overflow: "hidden" },
+            podiumSheen: { position: "absolute", inset: 0,
+                background: "linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent)",
+                backgroundSize: "250% auto" },
+            podiumRank: { fontFamily: "var(--font-display)", fontWeight: 900, fontSize: 15, color: "#1a1408" },
+        };
+
+        /* ══════════════════════════════════════════════════════════════
+           SHARED COMPONENTS
+           ═══════════════════════════════════════════════════════════════ */
+        function Veil({ children, onBg }) {
+            return (
+                <div style={S.veilBg} onMouseDown={e => { if (e.target === e.currentTarget) onBg?.(); }}>
+                    <div className="pc-modal-in" style={S.veilCard} onMouseDown={e => e.stopPropagation()}>{children}</div>
+                </div>
+            );
+        }
+
+        function MatchCard({ match, isAdmin, idx, onPred, onResult, onEditKO, onDeleteKO }) {
+            const done = !!match.result?.winner;
+            const predCount = PLAYERS.filter(p => match.predictions?.[p]?.winner).length;
+            return (
+                <div className="pc-card-hover pc-fade-up" style={{ ...S.matchCard, animationDelay: `${Math.min(idx,
+                    6) * 0.04}s` }}>
+                    <div style={S.matchTop}>
+                        <span style={S.matchStageTag}>{match.group ? `Group ${match.group}` : match.stage}</span>
+                        {done && <span style={{ ...S.ptBadge, background: "#1a4d2e", color: "#4ade80" }}>FT</span>}
+                    </div>
+                    <div style={S.matchTeams}>
+                        <div style={S.teamBlock}>
+                            <span style={S.teamFlag}>{flagOf(match.team1)}</span>
+                            <span style={S.teamName}>{match.team1}</span>
+                        </div>
+                        <div style={S.vsScore}>
+                            {done ?
+                                <div style={S.scoreText}>{match.result.score1}–{match.result.score2}</div> :
+                                <div style={S.vsText}>VS</div>}
+                        </div>
+                        <div style={S.teamBlock}>
+                            <span style={S.teamFlag}>{flagOf(match.team2)}</span>
+                            <span style={S.teamName}>{match.team2}</span>
+                        </div>
+                    </div>
+                    <div style={S.matchBtnRow}>
+                        <button className="pc-btn" style={S.smallBtn} onClick={onPred}>
+                            📝 {predCount > 0 ? `${predCount}/3 Predicted` : "Predict"}
+                        </button>
+                        {isAdmin && (
+                            <button className="pc-btn" style={{ ...S.smallBtn, ...(done ? S.smallBtnDone : {}) }}
+                            onClick={onResult}>
+                                {done ? "✅ Result Set" : "🎯 Set Result"}
+                            </button>
+                        )}
+                        {isAdmin && onEditKO && <button className="pc-btn" style={S.iconBtn} onClick={onEditKO}>✏️</button>}
+                        {isAdmin && onDeleteKO && <button className="pc-btn" style={S.iconBtn}
+                        onClick={onDeleteKO}>🗑</button>}
+                    </div>
+                    {predCount > 0 && (
+                        <div style={S.predsStrip}>
+                            {PLAYERS.map(p => {
+                                const pr = match.predictions?.[p];
+                                if (!pr?.winner) return null;
+                                const pts = done ? (calcPts(match.predictions, match.result, match.stage)[p] ??
+                                    0) : null;
+                                return (
+                                    <span key={p}>
+                                        <b style={{ color: "#c9a13b" }}>{p}:</b> {pr.score1}–{pr.score2}
+                                        {pts !== null && <b style={{ color: pts > 0 ? "#4ade80" :
+                                        "#fca5a5" }}> ({pts}pt)</b>}
+                                    </span>
+                                );
+                            })}
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        function ScoreRow({ label, val, onChange, accent }) {
+            return (
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                    <span style={{ width: 64, fontSize: 12, color: "#9a9488", fontWeight: 600 }}>{label}</span>
+                    <input className="pc-input" style={{ ...S.inp, width: 70, textAlign: "center",
+                            fontFamily: "var(--font-mono)", fontWeight: 700, borderColor: accent }}
+                        type="number" min="0" value={val} onChange={e => onChange(e.target.value)} />
+                </div>
+            );
+        }
+
+        function PredsModal({ match, onSave, onClose }) {
+            const isKO = match.stage !== "Group Stage";
+            const [vals, setVals] = useState(() => {
+                const init = {};
+                PLAYERS.forEach(p => {
+                    const existing = match.predictions?.[p];
+                    init[p] = existing ?
+                        { score1: existing.score1 ?? "", score2: existing.score2 ?? "", winner: existing
+                            .winner || "" } :
+                        { score1: "", score2: "", winner: "" };
+                });
+                return init;
+            });
+
+            function setScore(p, key, v) {
+                setVals(prev => {
+                    const s1 = key === "score1" ? v : prev[p].score1;
+                    const s2 = key === "score2" ? v : prev[p].score2;
+                    const prevWinner = prev[p].winner;
+                    let winner = "";
+                    if (s1 !== "" && s2 !== "") {
+                        const n1 = Number(s1),
+                            n2 = Number(s2);
+                        if (n1 > n2) winner = match.team1;
+                        else if (n2 > n1) winner = match.team2;
+                        else {
+                            winner = isKO ?
+                                (prevWinner === match.team1 || prevWinner === match.team2 ? prevWinner :
+                                "") :
+                                "Draw";
+                        }
+                    }
+                    return { ...prev, [p]: { score1: s1, score2: s2, winner } };
+                });
+            }
+
+            function setManualWinner(p, team) {
+                setVals(prev => ({ ...prev, [p]: { ...prev[p], winner: team } }));
+            }
+
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 4 }}>
+                        <p style={S.mh}>📝 Predictions</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    <p style={{ fontSize: 13, color: "#9a9488", margin: "0 0 16px" }}>
+                        {flagOf(match.team1)} {match.team1} vs {match.team2} {flagOf(match.team2)}
+                    </p>
+                    {PLAYERS.map((p, i) => {
+                        const pv = vals[p];
+                        const scoresEnteredAndLevel = pv.score1 !== "" && pv.score2 !== "" && Number(pv
+                        .score1) === Number(pv.score2);
+                        const needsManualPick = isKO && scoresEnteredAndLevel;
+                        return (
+                            <div key={p} style={{ ...S.card, padding: 12, marginBottom: 10,
+                                    borderLeft: `3px solid ${HOST_ACCENTS[i]}` }}>
+                                <div style={{ fontWeight: 700, color: "#ffd54a", fontSize: 13,
+                                        marginBottom: 8, fontFamily: "var(--font-display)" }}>{p}</div>
+                                <div style={{ display: "flex", gap: 12 }}>
+                                    <ScoreRow label={match.team1} val={pv.score1} onChange={v => setScore(p,
+                                        "score1", v)} />
+                                    <ScoreRow label={match.team2} val={pv.score2} onChange={v => setScore(p,
+                                        "score2", v)} />
+                                </div>
+                                {needsManualPick && (
+                                    <div style={{ marginTop: 4 }}>
+                                        <span style={{ fontSize: 11.5, color: "#c9a13b", fontWeight: 700,
+                                                display: "block", marginBottom: 6 }}>
+                                            ⚽ Level score — pick who wins on penalties
+                                        </span>
+                                        <div style={{ display: "flex", gap: 8 }}>
+                                            <button className="pc-btn" type="button"
+                                                style={{ ...S.smallBtn, flex: 1, ...(pv.winner === match
+                                                        .team1 ? S.smallBtnDone : {}) }}
+                                                onClick={() => setManualWinner(p, match.team1)}>
+                                                {flagOf(match.team1)} {match.team1}
+                                            </button>
+                                            <button className="pc-btn" type="button"
+                                                style={{ ...S.smallBtn, flex: 1, ...(pv.winner === match
+                                                        .team2 ? S.smallBtnDone : {}) }}
+                                                onClick={() => setManualWinner(p, match.team2)}>
+                                                {flagOf(match.team2)} {match.team2}
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                        onClick={() => onSave(match.id, vals)}>Save Predictions</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function ResultModal({ match, onSave, onClear, onClose }) {
+            const isKO = match.stage !== "Group Stage";
+            const [s1, setS1] = useState(match.result?.score1 ?? "");
+            const [s2, setS2] = useState(match.result?.score2 ?? "");
+            const [manualWinner, setManualWinner] = useState(match.result?.winner && match.result.winner !== "Draw" ?
+                match.result.winner : "");
+            const scoresEnteredAndLevel = s1 !== "" && s2 !== "" && Number(s1) === Number(s2);
+            const autoWinner = s1 !== "" && s2 !== "" ?
+                (Number(s1) > Number(s2) ? match.team1 : Number(s2) > Number(s1) ? match.team2 : "") :
+                "";
+            const winner = isKO ?
+                (scoresEnteredAndLevel ? manualWinner : autoWinner) :
+                (s1 !== "" && s2 !== "" ? (autoWinner || "Draw") : "");
+            const needsManualPick = isKO && scoresEnteredAndLevel;
+
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 4 }}>
+                        <p style={S.mh}>🎯 Set Result</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    <p style={{ fontSize: 13, color: "#9a9488", margin: "0 0 16px" }}>
+                        {flagOf(match.team1)} {match.team1} vs {match.team2} {flagOf(match.team2)}
+                    </p>
+                    <div style={{ display: "flex", gap: 12, marginBottom: 12 }}>
+                        <ScoreRow label={match.team1} val={s1} onChange={setS1} accent="#ffd54a" />
+                        <ScoreRow label={match.team2} val={s2} onChange={setS2} accent="#ffd54a" />
+                    </div>
+                    {needsManualPick && (
+                        <div style={{ marginBottom: 12 }}>
+                            <span style={{ fontSize: 12, color: "#c9a13b", fontWeight: 700, display: "block",
+                                    marginBottom: 6 }}>
+                                ⚽ Scores are level — pick who won on penalties
+                            </span>
+                            <div style={{ display: "flex", gap: 8 }}>
+                                <button className="pc-btn" type="button"
+                                    style={{ ...S.smallBtn, flex: 1, ...(manualWinner === match.team1 ?
+                                            S.smallBtnDone : {}) }}
+                                    onClick={() => setManualWinner(match.team1)}>
+                                    {flagOf(match.team1)} {match.team1}
+                                </button>
+                                <button className="pc-btn" type="button"
+                                    style={{ ...S.smallBtn, flex: 1, ...(manualWinner === match.team2 ?
+                                            S.smallBtnDone : {}) }}
+                                    onClick={() => setManualWinner(match.team2)}>
+                                    {flagOf(match.team2)} {match.team2}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    {winner && <p style={{ fontSize: 13, color: "#4ade80", marginBottom: 12 }}>Result: <b>{winner ===
+                                "Draw" ? "Draw" : `${winner} wins${needsManualPick ? " (on penalties)" : ""}`}</b></p>}
+                    <div style={S.row}>
+                        {match.result?.winner && (
+                            <button className="pc-btn" style={S.redBtn} onClick={() => onClear(match.id)}>🗑
+                            Clear</button>
+                        )}
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                            disabled={!winner}
+                            onClick={() => winner && onSave(match.id, winner, s1, s2)}>
+                            Save Result
+                        </button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function EditKnockoutModal({ match, onSave, onClose }) {
+            const [stage, setStage] = useState(match.stage);
+            const [t1, setT1] = useState(match.team1);
+            const [t2, setT2] = useState(match.team2);
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 12 }}>
+                        <p style={{ ...S.mh, margin: 0 }}>✏️ Edit Match</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    <div style={{ marginBottom: 10 }}>
+                        <span style={{ fontSize: 12, color: "#9a9488", fontWeight: 600, display: "block",
+                                marginBottom: 6 }}>Stage</span>
+                        <select className="pc-input" style={S.sel} value={stage} onChange={e => setStage(e.target
+                                .value)}>
+                            {STAGES.filter(s => s !== "Group Stage").map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                    </div>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 16 }}>
+                        <TeamInput value={t1} onChange={setT1} placeholder="Team 1" />
+                        <TeamInput value={t2} onChange={setT2} placeholder="Team 2" />
+                    </div>
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                            onClick={() => t1.trim() && t2.trim() && onSave(match.id, stage, t1, t2)}>Save
+                        Changes</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function AwardPersonInput({ label, val, onChange }) {
+            return (
+                <div style={{ marginBottom: 10 }}>
+                    <span style={{ fontSize: 12, color: "#9a9488", fontWeight: 600, display: "block",
+                            marginBottom: 6 }}>{label}</span>
+                    <div style={{ display: "flex", gap: 8 }}>
+                        <input className="pc-input" style={S.inp} placeholder="Player name" value={val.player ||
+                            ""}
+                            onChange={e => onChange({ ...val, player: e.target.value })} />
+                        <TeamInput value={val.team || ""} onChange={t => onChange({ ...val, team: t })}
+                            placeholder="Team" />
+                    </div>
+                </div>
+            );
+        }
+
+        function AwardPredsModal({ player, initial, onSave, onClose }) {
+            const [vals, setVals] = useState(() => {
+                const init = {};
+                AWARD_KEYS.forEach(k => { init[k] = initial?.[k] || { player: "", team: "" }; });
+                return init;
+            });
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 12 }}>
+                        <p style={{ ...S.mh, margin: 0 }}>🏅 {player}'s Award Picks</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    {AWARD_KEYS.map(key => (
+                        <AwardPersonInput key={key} label={AWARD_LABELS[key]} val={vals[key]}
+                            onChange={v => setVals(prev => ({ ...prev, [key]: v }))} />
+                    ))}
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                        onClick={() => onSave(vals)}>Save Picks</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function AwardResultsModal({ initial, onSave, onClose }) {
+            const [vals, setVals] = useState(() => {
+                const init = {};
+                AWARD_KEYS.forEach(k => { init[k] = initial?.[k] || { player: "", team: "" }; });
+                return init;
+            });
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 12 }}>
+                        <p style={{ ...S.mh, margin: 0 }}>🏆 Actual Award Winners</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    {AWARD_KEYS.map(key => (
+                        <AwardPersonInput key={key} label={AWARD_LABELS[key]} val={vals[key]}
+                            onChange={v => setVals(prev => ({ ...prev, [key]: v }))} />
+                    ))}
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                        onClick={() => onSave(vals)}>Save Results</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function StandingPredsModal({ player, initial, onSave, onClose }) {
+            const [vals, setVals] = useState(() => ({
+                champion: initial?.champion || "",
+                runnerUp: initial?.runnerUp || "",
+                third: initial?.third || "",
+            }));
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 12 }}>
+                        <p style={{ ...S.mh, margin: 0 }}>🏆 {player}'s Final Picks</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    {STANDING_KEYS.map(key => (
+                        <div key={key} style={{ marginBottom: 10 }}>
+                            <span style={{ fontSize: 12, color: "#9a9488", fontWeight: 600, display: "block",
+                                    marginBottom: 6 }}>{STANDING_LABELS[key]}</span>
+                            <TeamInput value={vals[key]} onChange={t => setVals(prev => ({ ...prev, [key]: t }))}
+                                placeholder="Team" />
+                        </div>
+                    ))}
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                        onClick={() => onSave(vals)}>Save Picks</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function StandingResultsModal({ initial, onSave, onClose }) {
+            const [vals, setVals] = useState(() => ({
+                champion: initial?.champion || "",
+                runnerUp: initial?.runnerUp || "",
+                third: initial?.third || "",
+            }));
+            return (
+                <Veil onBg={onClose}>
+                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                            marginBottom: 12 }}>
+                        <p style={{ ...S.mh, margin: 0 }}>🏆 Actual Final Standings</p>
+                        <button className="pc-btn" style={S.xBtn} onClick={onClose}>✕</button>
+                    </div>
+                    {STANDING_KEYS.map(key => (
+                        <div key={key} style={{ marginBottom: 10 }}>
+                            <span style={{ fontSize: 12, color: "#9a9488", fontWeight: 600, display: "block",
+                                    marginBottom: 6 }}>{STANDING_LABELS[key]}</span>
+                            <TeamInput value={vals[key]} onChange={t => setVals(prev => ({ ...prev, [key]: t }))}
+                                placeholder="Team" />
+                        </div>
+                    ))}
+                    <div style={S.row}>
+                        <button className="pc-btn" style={S.cancelBtn} onClick={onClose}>Cancel</button>
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                        onClick={() => onSave(vals)}>Save Results</button>
+                    </div>
+                </Veil>
+            );
+        }
+
+        function AddKnockoutForm({ onAdd }) {
+            const [stage, setStage] = useState("Round of 32");
+            const [t1, setT1] = useState("");
+            const [t2, setT2] = useState("");
+            return (
+                <div className="pc-card-hover" style={{ ...S.card, padding: 14, marginBottom: 14 }}>
+                    <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 10, fontSize: 13,
+                            fontFamily: "var(--font-display)" }}>➕ Add Knockout Match</div>
+                    <div style={{ marginBottom: 10 }}>
+                        <select className="pc-input" style={S.sel} value={stage} onChange={e => setStage(e.target
+                                .value)}>
+                            {STAGES.filter(s => s !== "Group Stage").map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                    </div>
+                    <div style={{ display: "flex", gap: 8, marginBottom: 10 }}>
+                        <TeamInput value={t1} onChange={setT1} placeholder="Team 1" />
+                        <TeamInput value={t2} onChange={setT2} placeholder="Team 2" />
+                    </div>
+                    <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, width: "100%" }}
+                        onClick={() => { if (t1.trim() && t2.trim()) { onAdd(stage, t1, t2);
+                                setT1("");
+                                setT2(""); } }}>
+                        Add Match
+                    </button>
+                </div>
+            );
+        }
+
+        function GroupTableAndBracket({ matches, isAdmin, onAddKnockout }) {
+            const [gView, setGView] = useState("A");
+            const groupTables = computeAllGroupTables(matches);
+            const koStages = STAGES.filter(s => s !== "Group Stage");
+            return (
+                <div>
+                    <h2 style={S.secH}>📊 Group Standings</h2>
+                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 14 }}>
+                        {ALL_GROUP_LETTERS.map(g => (
+                            <button key={g} className="pc-btn" style={{ ...S.grpBtn, ...(gView === g ? S
+                                        .grpBtnOn : {}) }} onClick={() => setGView(g)}>
+                                Group {g}
+                            </button>
+                        ))}
+                    </div>
+                    <div className="pc-card-hover" style={{ ...S.card, padding: 14, marginBottom: 20,
+                            overflowX: "auto" }}>
+                        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+                            <thead>
+                                <tr style={{ color: "#9a9488", textAlign: "left" }}>
+                                    <th style={{ padding: "4px 6px" }}>Team</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>P</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>W</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>D</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>L</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>GD</th>
+                                    <th style={{ padding: "4px 6px", textAlign: "center" }}>Pts</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {groupTables[gView].table.map((t, i) => (
+                                    <tr key={t.team} style={{ borderTop: "1px solid #221d12",
+                                            color: i < 2 ? "#fff" : "#9a9488", fontWeight: i < 2 ? 700 :
+                                            500 }}>
+                                        <td style={{ padding: "6px" }}>{flagOf(t.team)} {t.team}</td>
+                                        <td style={{ padding: "6px", textAlign: "center" }}>{t.P}</td>
+                                        <td style={{ padding: "6px", textAlign: "center" }}>{t.W}</td>
+                                        <td style={{ padding: "6px", textAlign: "center" }}>{t.D}</td>
+                                        <td style={{ padding: "6px", textAlign: "center" }}>{t.L}</td>
+                                        <td style={{ padding: "6px", textAlign: "center" }}>{t.GD > 0 ?
+                                                `+${t.GD}` : t.GD}</td>
+                                        <td style={{ padding: "6px", textAlign: "center", color: "#ffd54a",
+                                                fontWeight: 800 }}>{t.Pts}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                        {!groupTables[gView].complete && (
+                            <p style={{ fontSize: 11, color: "#6b6450", marginTop: 8 }}>Standings update automatically
+                                as results come in.</p>
+                        )}
+                    </div>
+                    <h2 style={S.secH}>🏆 Knockout Bracket</h2>
+                    {isAdmin && <AddKnockoutForm onAdd={onAddKnockout} />}
+                    {koStages.map(stage => {
+                        const sm = matches.filter(m => m.stage === stage);
+                        if (!sm.length) return null;
+                        return (
+                            <div key={stage} style={{ marginBottom: 18 }}>
+                                <div style={S.stageHd}>{STAGE_ICO[stage]} {stage}</div>
+                                {sm.map(m => (
+                                    <div key={m.id} className="pc-card-hover" style={{ ...S.card,
+                                            padding: 12, marginBottom: 8 }}>
+                                        <div style={{ display: "flex", alignItems: "center",
+                                                justifyContent: "space-between" }}>
+                                            <span style={{ fontSize: 13, fontWeight: 600,
+                                                color: "#fff" }}>{flagOf(m.team1)} {m.team1}</span>
+                                            <span style={{ fontFamily: "var(--font-mono)",
+                                                    fontWeight: 800, color: "#ffd54a",
+                                                    fontSize: 13 }}>
+                                                {m.result?.winner ? `${m.result.score1}–${m.result.score2}` :
+                                                    "vs"}
+                                            </span>
+                                            <span style={{ fontSize: 13, fontWeight: 600,
+                                                color: "#fff" }}>{m.team2} {flagOf(m.team2)}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        );
+                    })}
+                    {matches.filter(m => m.stage !== "Group Stage").length === 0 && (
+                        <p style={{ fontSize: 13, color: "#6b6450", textAlign: "center", padding: "20px 0" }}>
+                            Knockout matches appear here automatically once all groups finish, or add them manually as
+                            admin.
+                        </p>
+                    )}
+                </div>
+            );
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           TAB NAV
+           ═══════════════════════════════════════════════════════════════ */
+        const TAB_LIST = [
+            ["matches", "⚽", "Matches"],
+            ["board", "🏆", "Board"],
+            ["awards", "🏅", "Awards"],
+            ["history", "📋", "History"],
+            ["knockout", "📊", "Groups"],
+        ];
+
+        function TabNav({ tab, setTab }) {
+            const wrapRef = useRef();
+            const [bar, setBar] = useState({ left: 0, width: 0 });
+            useEffect(() => {
+                const el = wrapRef.current?.querySelector(`[data-tab="${tab}"]`);
+                if (el) {
+                    const pr = wrapRef.current.getBoundingClientRect();
+                    const r = el.getBoundingClientRect();
+                    setBar({ left: r.left - pr.left, width: r.width });
+                }
+            }, [tab]);
+            return (
+                <nav ref={wrapRef} style={S.nav}>
+                    {TAB_LIST.map(([t, icon, label]) => (
+                        <button key={t} data-tab={t} className="pc-btn pc-nav-btn" style={{ ...S.navBtn,
+                                ...(tab === t ? S.navOn : {}) }} onClick={() => setTab(t)}>
+                            <span style={{ display: "block", fontSize: 14, marginBottom: 2 }}>{icon}</span>{label}
+                        </button>
+                    ))}
+                    <div className="pc-underline-glow" style={{ ...S.navUnderline, left: bar.left, width: bar
+                            .width }} />
+                </nav>
+            );
+        }
+
+        function VerifyPanel({ matches }) {
+            const completed = matches.filter(m => m.result?.winner);
+            const [selId, setSelId] = useState(completed[0]?.id ?? null);
+            const sel = completed.find(m => m.id === selId) || completed[completed.length - 1];
+            if (!completed.length) {
+                return (
+                    <div className="pc-card-hover" style={{ ...S.card, padding: 16, marginTop: 10 }}>
+                        <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 6,
+                                fontFamily: "var(--font-display)" }}>🔬 Verify the Math</div>
+                        <div style={{ fontSize: 12, color: "#6b6450" }}>No completed matches yet — once a result is
+                            added, you can audit how points were calculated here.</div>
+                    </div>
+                );
+            }
+            const isBig = BIG_STAGES.includes(sel.stage);
+            return (
+                <div className="pc-card-hover" style={{ ...S.card, padding: 16, marginTop: 10 }}>
+                    <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 4,
+                            fontFamily: "var(--font-display)" }}>🔬 Verify the Math</div>
+                    <div style={{ fontSize: 11.5, color: "#6b6450", marginBottom: 10, lineHeight: 1.5 }}>
+                        Pick any finished match to see exactly how each player's points were worked out — no guessing,
+                        no black box.
+                    </div>
+                    <select className="pc-input" style={S.sel} value={sel.id} onChange={e => setSelId(Number(e
+                            .target.value))}>
+                        {completed.map(m => (
+                            <option key={m.id} value={m.id}>{m.team1} {m.result.score1}–{m.result.score2} {m
+                                    .team2} ({m.stage})</option>
+                        ))}
+                    </select>
+                    <div style={{ marginTop: 12, fontSize: 12, color: "#9a9488", marginBottom: 8 }}>
+                        Actual result: <b style={{ color: "#fff" }}>{sel.result.winner}</b> won {sel.result
+                        .score1}–{sel.result.score2}
+                        {isBig && <span style={{ color: "#c9a13b" }}> · SF/Final → 2pt win / 2.5pt draw-bonus / 3pt
+                            exact</span>}
+                        {KNOCKOUT_STAGES.includes(sel.stage) && !isBig && <span style={{ color: "#c9a13b" }}> ·
+                            knockout → 1pt win / 1.5pt draw-bonus / 2pt exact</span>}
+                        {!KNOCKOUT_STAGES.includes(sel.stage) && <span style={{ color: "#c9a13b" }}> · group stage →
+                            1pt win / 2pt exact</span>}
+                    </div>
+                    {PLAYERS.map(pl => {
+                        const pr = sel.predictions?.[pl];
+                        if (!pr?.winner) return (
+                            <div key={pl} style={S.verifyRow}>
+                                <b style={{ color: "#ffd54a", fontFamily: "var(--font-display)",
+                                        fontSize: 12.5 }}>{pl}</b>
+                                <span style={{ color: "#6b6450", fontSize: 12 }}>no prediction submitted → 0
+                                pts</span>
+                            </div>
+                        );
+                        const pts = calcPts({ [pl]: pr }, sel.result, sel.stage)[pl] ?? 0;
+                        const winnerMatch = pr.winner.trim().toLowerCase() === sel.result.winner.trim()
+                            .toLowerCase();
+                        const exactMatch = winnerMatch && numEq(pr.score1, sel.result.score1) && numEq(pr
+                            .score2, sel.result.score2);
+                        const drawBonus = winnerMatch && !exactMatch && isPredictedDraw(pr) && KNOCKOUT_STAGES
+                            .includes(sel.stage) && numEq(sel.result.score1, sel.result.score2);
+                        return (
+                            <div key={pl} style={S.verifyRow}>
+                                <b style={{ color: "#ffd54a", fontFamily: "var(--font-display)",
+                                        fontSize: 12.5 }}>{pl}</b>
+                                <span style={{ fontSize: 12, color: "#c9a13b" }}>predicted {pr.winner} {pr
+                                        .score1}–{pr.score2}</span>
+                                <span style={{ fontSize: 11, color: "#6b6450" }}>
+                                    {!winnerMatch && "→ wrong winner"}
+                                    {winnerMatch && exactMatch && "→ correct winner + exact score"}
+                                    {drawBonus &&
+                                        "→ correct winner + drew score predicted + actual went to pens 🎯 bonus"}
+                                    {winnerMatch && !exactMatch && !drawBonus &&
+                                        "→ correct winner, different score"}
+                                </span>
+                                <span style={{ ...S.ptBadge, alignSelf: "flex-start",
+                                        background: pts >= 2 ? "#1a4d2e" : pts === 1.5 || pts === 2.5 ?
+                                            "#5a3a08" : pts === 1 ? "#5a4416" : "#4a1818",
+                                        color: pts >= 2 ? "#4ade80" : pts === 1.5 || pts === 2.5 ?
+                                            "#fb923c" : pts === 1 ? "#facc15" : "#fca5a5" }}>
+                                    = {pts} pts
+                                </span>
+                            </div>
+                        );
+                    })}
+                </div>
+            );
+        }
+
+        function Podium({ lb }) {
+            const top3 = lb.slice(0, 3);
+            const visualOrder = [1, 0, 2];
+            const HEIGHT_BY_RANK = [148, 108, 76];
+            return (
+                <div style={S.podiumOuter} className="pc-fade-up">
+                    <div style={S.podiumGroundGlow} />
+                    <div style={S.podiumWrap}>
+                        {visualOrder.map((rankIdx, vi) => {
+                            const p = top3[rankIdx];
+                            if (!p) return null;
+                            const accentIdx = PLAYERS.indexOf(p.name);
+                            const rank = rankIdx + 1;
+                            const isChamp = rank === 1 && p.p > 0;
+                            return (
+                                <div key={p.name} style={S.podiumCol}>
+                                    {isChamp && (
+                                        <div style={S.confettiWrap}>
+                                            {["#ffd54a", "#ff2d2d", "#00a859", "#0057b8", "#fff3cf"].map((c,
+                                            ci) => (
+                                                <span key={ci} className="pc-confetti" style={{ ...S
+                                                        .confettiBit, left: `${10 + ci * 20}%`,
+                                                        background: c, animationDelay: `${ci * 0.32}s` }} />
+                                            ))}
+                                        </div>
+                                    )}
+                                    <div className="pc-kick-in" style={{ ...S.podiumMedal,
+                                            animationDelay: `${vi * 0.12}s` }}>{isChamp ? <span
+                                            className="pc-crown">👑</span> : MEDALS[rankIdx]}</div>
+                                    <div style={S.podiumName}>{p.name}</div>
+                                    <div style={S.podiumPts}>{p.p}<span style={{ fontSize: 10, color: "#9a9180",
+                                                fontWeight: 700 }}> pts</span></div>
+                                    <div className="pc-podium-bar" style={{ ...S.podiumBase,
+                                            height: HEIGHT_BY_RANK[rankIdx], animationDelay: `${vi * 0.08}s`,
+                                            background: rank === 1 ?
+                                            "linear-gradient(180deg,#ffe9a8,#ffd54a 45%,#a9781a)" :
+                                            `linear-gradient(180deg,${HOST_ACCENTS[accentIdx]}cc,${HOST_ACCENTS[accentIdx]}3a)`,
+                                            boxShadow: rank === 1 ?
+                                            "0 -2px 0 rgba(255,255,255,.5) inset, 0 10px 30px rgba(255,213,74,.35)" :
+                                            "0 -2px 0 rgba(255,255,255,.12) inset, 0 8px 22px rgba(0,0,0,.35)"
+                                        }}>
+                                        {rank === 1 && <div className="pc-gold-sheen" style={S
+                                            .podiumSheen} />}
+                                        <span style={S.podiumRank}>{rank === 1 ? "⚽" : rank}</span>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        }
+
+        function AwardsTab({
+            app,
+            isAdmin,
+            awardPts,
+            standingPts,
+            editAwardPlayer,
+            setEditAwardPlayer,
+            editAwardResults,
+            setEditAwardResults,
+            editStandPlayer,
+            setEditStandPlayer,
+            editStandResults,
+            setEditStandResults,
+            onSaveAwardPreds,
+            onSaveAwardResults,
+            onSaveStandingPreds,
+            onSaveStandingResults,
+        }) {
+            return (
+                <div>
+                    <h2 style={S.secH}>🏅 Individual Awards</h2>
+                    <p style={{ fontSize: 12, color: "#9a9488", marginBottom: 14, lineHeight: 1.6 }}>
+                        সঠিক player বললে 2pt। ভুল হলেও সেই player-এর দলের কেউ award পেলে 1pt। Golden Ball + Golden Boot
+                        দুটোই সঠিক হলে +3 bonus।
+                    </p>
+                    {isAdmin && (
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, width: "100%",
+                                marginBottom: 14 }} onClick={() => setEditAwardResults(true)}>
+                            📝 Set Actual Award Winners
+                        </button>
+                    )}
+                    <div className="pc-card-hover" style={{ ...S.card, padding: 14, marginBottom: 16 }}>
+                        <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 8, fontSize: 13,
+                                fontFamily: "var(--font-display)" }}>🏆 Actual Winners</div>
+                        {AWARD_KEYS.map(key => {
+                            const a = app.awards?.[key];
+                            return (
+                                <div key={key} style={{ display: "flex", justifyContent: "space-between",
+                                        fontSize: 13, marginBottom: 6 }}>
+                                    <span style={{ color: "#9a9488" }}>{AWARD_LABELS[key]}</span>
+                                    <span style={{ color: a?.player ? "#fff" : "#3a3526", fontWeight: 600 }}>
+                                        {a?.player ? `${a.player}${a.team ? ` (${a.team})` : ""}` : "— not set —"}
+                                    </span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {PLAYERS.map((pl, idx) => {
+                        const preds = app.awardPreds?.[pl] || {};
+                        const pts = awardPts[pl] || { perAward: {}, total: 0, ballBootBonus: 0 };
+                        return (
+                            <div key={pl} className="pc-card-hover" style={{ ...S.card, padding: 14,
+                                    marginBottom: 10, borderLeft: `3px solid ${HOST_ACCENTS[idx]}` }}>
+                                <div style={{ display: "flex", justifyContent: "space-between",
+                                        alignItems: "center", marginBottom: 8 }}>
+                                    <div style={{ fontWeight: 700, color: "#ffd54a", fontSize: 14,
+                                            fontFamily: "var(--font-display)" }}>{pl}</div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                        <span style={{ fontWeight: 900, color: "#ffd54a",
+                                                fontFamily: "var(--font-display)" }}>{pts.total} pts</span>
+                                        {isAdmin && <button className="pc-btn" style={S.aBtn}
+                                            onClick={() => setEditAwardPlayer(pl)}>✏️ Edit</button>}
+                                    </div>
+                                </div>
+                                {AWARD_KEYS.map(key => {
+                                    const pr = preds[key];
+                                    return (
+                                        <div key={key} style={{ display: "flex",
+                                                justifyContent: "space-between", fontSize: 12.5,
+                                                marginBottom: 5 }}>
+                                            <span style={{ color: "#9a9488" }}>{AWARD_LABELS[key]}</span>
+                                            <span style={{ display: "flex", alignItems: "center",
+                                                    gap: 6 }}>
+                                                <span style={{ color: pr?.player ? "#e8e2cf" :
+                                                        "#3a3526" }}>
+                                                    {pr?.player ? `${pr.player}${pr.team ? ` (${pr.team})` :
+                                                            ""}` : "—"}
+                                                </span>
+                                                {app.awards?.[key]?.player && (
+                                                    <span style={{ ...S.ptBadge, fontSize: 9,
+                                                            background: pts.perAward[key] === 2 ?
+                                                                "#1a4d2e" : pts.perAward[key] === 1 ?
+                                                                "#5a4416" : "#4a1818",
+                                                            color: pts.perAward[key] === 2 ? "#4ade80" :
+                                                                pts.perAward[key] === 1 ? "#facc15" :
+                                                                "#fca5a5" }}>
+                                                        {pts.perAward[key] ?? 0}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                                {pts.ballBootBonus > 0 && <div style={{ fontSize: 11, color: "#4ade80",
+                                        marginTop: 4, fontWeight: 700 }}>🎁 +3 Ball+Boot bonus!</div>}
+                            </div>
+                        );
+                    })}
+                    {editAwardPlayer && (
+                        <AwardPredsModal player={editAwardPlayer} initial={app.awardPreds?.[editAwardPlayer]}
+                            onSave={vals => { onSaveAwardPreds(editAwardPlayer, vals);
+                                setEditAwardPlayer(null); }}
+                            onClose={() => setEditAwardPlayer(null)} />
+                    )}
+                    {editAwardResults && (
+                        <AwardResultsModal initial={app.awards}
+                            onSave={vals => { onSaveAwardResults(vals);
+                                setEditAwardResults(false); }}
+                            onClose={() => setEditAwardResults(false)} />
+                    )}
+                    <div style={{ height: 1, background: "linear-gradient(90deg,transparent,#2e2818,transparent)",
+                            margin: "24px 0" }} />
+                    <h2 style={S.secH}>🏆 Final Tournament Standings</h2>
+                    <p style={{ fontSize: 12, color: "#9a9488", marginBottom: 14, lineHeight: 1.6 }}>
+                        Champion, Runner-up, 3rd Place — প্রতিটা সঠিক হলে 2pt। ৩টার মধ্যে ২টা বা তার বেশি সঠিক হলে +3
+                        bonus।
+                    </p>
+                    {isAdmin && (
+                        <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, width: "100%",
+                                marginBottom: 14 }} onClick={() => setEditStandResults(true)}>
+                            📝 Set Actual Final Standings
+                        </button>
+                    )}
+                    <div className="pc-card-hover" style={{ ...S.card, padding: 14, marginBottom: 16 }}>
+                        <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 8, fontSize: 13,
+                                fontFamily: "var(--font-display)" }}>🏆 Actual Standings</div>
+                        {STANDING_KEYS.map(key => {
+                            const val = app.standings?.[key];
+                            return (
+                                <div key={key} style={{ display: "flex", justifyContent: "space-between",
+                                        fontSize: 13, marginBottom: 6 }}>
+                                    <span style={{ color: "#9a9488" }}>{STANDING_LABELS[key]}</span>
+                                    <span style={{ color: val ? "#fff" : "#3a3526", fontWeight: 600 }}>{val ?
+                                            `${flagOf(val)} ${val}` : "— not set —"}</span>
+                                </div>
+                            );
+                        })}
+                    </div>
+                    {PLAYERS.map((pl, idx) => {
+                        const preds = app.standingPreds?.[pl] || {};
+                        const pts = standingPts[pl] || { perSlot: {}, total: 0, bonus: 0, correctCount: 0 };
+                        return (
+                            <div key={pl} className="pc-card-hover" style={{ ...S.card, padding: 14,
+                                    marginBottom: 10, borderLeft: `3px solid ${HOST_ACCENTS[idx]}` }}>
+                                <div style={{ display: "flex", justifyContent: "space-between",
+                                        alignItems: "center", marginBottom: 8 }}>
+                                    <div style={{ fontWeight: 700, color: "#ffd54a", fontSize: 14,
+                                            fontFamily: "var(--font-display)" }}>{pl}</div>
+                                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                        <span style={{ fontWeight: 900, color: "#ffd54a",
+                                                fontFamily: "var(--font-display)" }}>{pts.total} pts</span>
+                                        {isAdmin && <button className="pc-btn" style={S.aBtn}
+                                            onClick={() => setEditStandPlayer(pl)}>✏️ Edit</button>}
+                                    </div>
+                                </div>
+                                {STANDING_KEYS.map(key => {
+                                    const val = preds[key];
+                                    return (
+                                        <div key={key} style={{ display: "flex",
+                                                justifyContent: "space-between", fontSize: 12.5,
+                                                marginBottom: 5 }}>
+                                            <span style={{ color: "#9a9488" }}>{STANDING_LABELS[key]}</span>
+                                            <span style={{ display: "flex", alignItems: "center",
+                                                    gap: 6 }}>
+                                                <span style={{ color: val ? "#e8e2cf" :
+                                                    "#3a3526" }}>{val ? `${flagOf(val)} ${val}` :
+                                                    "—"}</span>
+                                                {app.standings?.[key] && (
+                                                    <span style={{ ...S.ptBadge, fontSize: 9,
+                                                            background: pts.perSlot[key] === 2 ?
+                                                                "#1a4d2e" : "#4a1818",
+                                                            color: pts.perSlot[key] === 2 ? "#4ade80" :
+                                                                "#fca5a5" }}>
+                                                        {pts.perSlot[key] ?? 0}
+                                                    </span>
+                                                )}
+                                            </span>
+                                        </div>
+                                    );
+                                })}
+                                {pts.bonus > 0 && <div style={{ fontSize: 11, color: "#4ade80", marginTop: 4,
+                                        fontWeight: 700 }}>🎁 +3 accuracy bonus!</div>}
+                            </div>
+                        );
+                    })}
+                    {editStandPlayer && (
+                        <StandingPredsModal player={editStandPlayer} initial={app.standingPreds?.[editStandPlayer]}
+                            onSave={vals => { onSaveStandingPreds(editStandPlayer, vals);
+                                setEditStandPlayer(null); }}
+                            onClose={() => setEditStandPlayer(null)} />
+                    )}
+                    {editStandResults && (
+                        <StandingResultsModal initial={app.standings}
+                            onSave={vals => { onSaveStandingResults(vals);
+                                setEditStandResults(false); }}
+                            onClose={() => setEditStandResults(false)} />
+                    )}
+                </div>
+            );
+        }
+
+        /* ══════════════════════════════════════════════════════════════
+           MAIN APP
+           ═══════════════════════════════════════════════════════════════ */
+        function App() {
+            const [app, setApp] = useState(null);
+            const [isAdmin, setIsAdmin] = useState(false);
+            const [tab, setTab] = useState("matches");
+            const [toast, setToast] = useState("");
+            const [pinOpen, setPinOpen] = useState(false);
+            const [pinVal, setPinVal] = useState("");
+            const [pinErr, setPinErr] = useState(false);
+            const [rModal, setRModal] = useState(null);
+            const [pModal, setPModal] = useState(null);
+            const [histP, setHistP] = useState(null);
+            const [grpFilter, setGrpFilter] = useState("ALL");
+            const [searchQ, setSearchQ] = useState("");
+            const [syncState, setSyncState] = useState("loading");
+            const [lastSync, setLastSync] = useState(null);
+            const [confirmClear, setConfirmClear] = useState(null);
+            const [editKO, setEditKO] = useState(null);
+            const [deleteKO, setDeleteKO] = useState(null);
+            const [editAwardPlayer, setEditAwardPlayer] = useState(null);
+            const [editAwardResults, setEditAwardResults] = useState(false);
+            const [editStandPlayer, setEditStandPlayer] = useState(null);
+            const [editStandResults, setEditStandResults] = useState(false);
+
+            const loaded = useRef(false);
+            const appRef = useRef(null);
+            const modalOpenRef = useRef(false);
+            appRef.current = app;
+            modalOpenRef.current = !!(pModal || rModal || pinOpen || editKO || confirmClear || deleteKO ||
+                editAwardPlayer || editAwardResults || editStandPlayer || editStandResults);
+
+            function withRev(updater) {
+                setApp(prev => {
+                    const next = updater(prev);
+                    const advancedMatches = autoAdvanceBracket(next.matches);
+                    return { ...next, matches: advancedMatches, rev: (prev?.rev || 0) + 1, updatedAt: Date
+                            .now(), updatedBy: isAdmin ? "Admin" : undefined };
+                });
+            }
+
+            useEffect(() => {
+                sRead().then(({ data: d }) => {
+                    const savedById = Object.fromEntries((d?.matches || []).map(m => [m.id, m]));
+                    const merged = BASE_MATCHES.map(bm => {
+                        const saved = savedById[bm.id];
+                        return { ...bm, predictions: saved?.predictions || SAVED_PREDS[bm.id] || {},
+                            result: saved?.result || SAVED_RESULTS[bm.id] || null };
+                    });
+                    const storedExtra = (d?.matches || []).filter(m => m.stage !== "Group Stage");
+                    const defaultKnockout = [
+                        ...SAVED_R32.map(r => ({ ...r, stage: "Round of 32" })),
+                        ...SAVED_KNOCKOUT_REST,
+                    ];
+                    const extra = storedExtra.length > 0 ? storedExtra :
+                        defaultKnockout.map(r => {
+                            const stored = storedExtra.find(m => m.id === r.id);
+                            return { ...r, predictions: stored?.predictions || r.predictions || {},
+                                result: stored?.result || r.result || null };
+                        });
+                    setApp({
+                        matches: autoAdvanceBracket([...merged, ...extra]),
+                        nid: d?.nid || 105,
+                        awards: d?.awards || SAVED_AWARD_RESULTS,
+                        awardPreds: d?.awardPreds || SAVED_AWARD_PREDS,
+                        standings: d?.standings || SAVED_STANDING_RESULTS,
+                        standingPreds: d?.standingPreds || SAVED_STANDING_PREDS,
+                        rev: d?.rev || 0,
+                        updatedAt: d?.updatedAt || null,
+                        updatedBy: d?.updatedBy || null,
+                    });
+                    loaded.current = true;
+                    setSyncState("synced");
+                    setLastSync(Date.now());
+                });
+            }, []);
+
+            useEffect(() => {
+                if (!loaded.current || !app) return;
+                setSyncState("syncing");
+                let cancelled = false;
+                let attempt = 0;
+                const tryWrite = () => {
+                    sWrite(app).then(ok => {
+                        if (cancelled) return;
+                        if (ok) { setSyncState("synced");
+                            setLastSync(Date.now()); return; }
+                        attempt++;
+                        if (attempt <= 3) setTimeout(tryWrite, 1500 * attempt);
+                        else setSyncState("offline");
+                    });
+                };
+                tryWrite();
+                return () => { cancelled = true; };
+            }, [app]);
+
+            useEffect(() => {
+                const id = setInterval(() => {
+                    if (modalOpenRef.current) return;
+                    sRead().then(({ data: remote, notFound, error }) => {
+                        if (!remote) {
+                            setLastSync(Date.now());
+                            if (error && !notFound) setSyncState("offline");
+                            return;
+                        }
+                        const localRev = appRef.current?.rev || 0;
+                        const remoteRev = remote.rev || 0;
+                        if (remoteRev > localRev) {
+                            const savedById = Object.fromEntries((remote.matches || []).map(m => [m.id,
+                                m
+                            ]));
+                            const merged = BASE_MATCHES.map(bm => {
+                                const saved = savedById[bm.id];
+                                return { ...bm, predictions: saved?.predictions || {},
+                                    result: saved?.result || null };
+                            });
+                            const extra = (remote.matches || []).filter(m => m.stage !== "Group Stage");
+                            setApp({
+                                matches: [...merged, ...extra],
+                                nid: remote.nid || 73,
+                                awards: remote.awards || {},
+                                awardPreds: remote.awardPreds || {},
+                                standings: remote.standings || {},
+                                standingPreds: remote.standingPreds || {},
+                                rev: remoteRev,
+                                updatedAt: remote.updatedAt || null,
+                                updatedBy: remote.updatedBy || null,
+                            });
+                            setLastSync(Date.now());
+                            say("🔄 Synced new updates");
+                        } else {
+                            setLastSync(Date.now());
+                        }
+                    }).catch(() => setSyncState("offline"));
+                }, 20000);
+                return () => clearInterval(id);
+            }, []);
+
+            function say(msg) { setToast(msg);
+                setTimeout(() => setToast(""), 2200); }
+
+            function login() {
+                if (pinVal.trim().toUpperCase() === PIN) { setIsAdmin(true);
+                    setPinOpen(false);
+                    setPinVal("");
+                    setPinErr(false);
+                    say("🔐 Admin mode"); } else setPinErr(true);
+            }
+
+            function savePreds(matchId, preds) {
+                withRev(prev => ({ ...prev, matches: prev.matches.map(m => m.id === matchId ? { ...m,
+                            predictions: preds } : m) }));
+                say("✅ Predictions saved!");
+                setPModal(null);
+            }
+
+            function saveResult(matchId, winner, s1, s2) {
+                withRev(prev => ({ ...prev, matches: prev.matches.map(m => m.id === matchId ? { ...m,
+                            result: { winner: winner.trim(), score1: s1, score2: s2 } } : m) }));
+                say("✅ Result saved!");
+                setRModal(null);
+            }
+
+            function requestClearResult(matchId) { setConfirmClear(matchId); }
+
+            function confirmClearResult() {
+                const matchId = confirmClear;
+                withRev(prev => ({ ...prev, matches: prev.matches.map(m => m.id === matchId ? { ...m,
+                            result: null } : m) }));
+                say("↩️ Result cleared");
+                setConfirmClear(null);
+                setRModal(null);
+            }
+
+            function addKnockout(stage, team1, team2) {
+                withRev(prev => {
+                    const id = prev.nid;
+                    return { ...prev, matches: [...prev.matches, { id, stage, team1: team1.trim(),
+                                team2: team2.trim(), predictions: {}, result: null }], nid: id + 1 };
+                });
+                say("✅ Match added!");
+            }
+
+            function updateKnockout(matchId, stage, team1, team2) {
+                withRev(prev => ({ ...prev, matches: prev.matches.map(m => m.id === matchId ? { ...m,
+                            stage, team1: team1.trim(), team2: team2.trim() } : m) }));
+                say("✅ Match updated!");
+                setEditKO(null);
+            }
+
+            function requestDeleteKnockout(matchId) { setDeleteKO(matchId); }
+
+            function confirmDeleteKnockout() {
+                const matchId = deleteKO;
+                withRev(prev => ({ ...prev, matches: prev.matches.filter(m => m.id !== matchId) }));
+                say("🗑 Match removed");
+                setDeleteKO(null);
+            }
+
+            function saveAwardPreds(player, vals) {
+                withRev(prev => ({ ...prev, awardPreds: { ...prev.awardPreds, [player]: vals } }));
+                say(`✅ ${player}'s award picks saved!`);
+            }
+
+            function saveAwardResults(vals) {
+                withRev(prev => ({ ...prev, awards: vals }));
+                say("✅ Award results saved!");
+            }
+
+            function saveStandingPreds(player, vals) {
+                withRev(prev => ({ ...prev, standingPreds: { ...prev.standingPreds, [player]: vals } }));
+                say(`✅ ${player}'s final picks saved!`);
+            }
+
+            function saveStandingResults(vals) {
+                withRev(prev => ({ ...prev, standings: vals }));
+                say("✅ Final standings saved!");
+            }
+
+            const awardPts = app ? calcAwardPts(app.awardPreds, app.awards) : {};
+            const standingPts = app ? calcStandingPts(app.standingPreds, app.standings) : {};
+            const lb = (() => {
+                if (!app) return PLAYERS.map(n => ({ name: n, p: 0 }));
+                const t = Object.fromEntries(PLAYERS.map(n => [n, 0]));
+                app.matches.forEach(m => {
+                    if (!m.result?.winner) return;
+                    const p = calcPts(m.predictions, m.result, m.stage);
+                    PLAYERS.forEach(n => { t[n] += p[n] ?? 0; });
+                });
+                PLAYERS.forEach(n => {
+                    t[n] += awardPts[n]?.total ?? 0;
+                    t[n] += standingPts[n]?.total ?? 0;
+                });
+                return PLAYERS.map(n => ({ name: n, p: t[n] })).sort((a, b) => b.p - a.p);
+            })();
+
+            const done = app?.matches.filter(m => m.result?.winner).length ?? 0;
+            const total = app?.matches.length ?? 0;
+            const groups = ["ALL", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L"];
+
+            if (!app) return (
+                <div style={{ ...S.page, display: "flex", flexDirection: "column", alignItems: "center",
+                        justifyContent: "center", minHeight: "100vh" }} className="pc-root">
+                    <div style={S.loadRing} className="pc-glow-pulse">
+                        <div style={S.loadRingBorder} className="pc-ring-spin" />
+                        <div style={S.loadBall} className="pc-bounce">⚽</div>
+                    </div>
+                    <div style={{ color: "#d9b65c", marginTop: 22, fontSize: 13, fontWeight: 800, letterSpacing: 2.5,
+                            fontFamily: "var(--font-display)", textTransform: "uppercase" }}>Loading World Cup…</div>
+                    <div style={S.loadBarTrack}><div style={S.loadBarFill} className="pc-load-fill" /></div>
+                </div>
+            );
+
+            const gsMatches = app.matches.filter(m => m.stage === "Group Stage");
+            const koMatches = app.matches.filter(m => m.stage !== "Group Stage");
+            const q = searchQ.trim().toLowerCase();
+            const matchesSearch = m => !q || m.team1.toLowerCase().includes(q) || m.team2.toLowerCase()
+            .includes(q);
+            const filteredGs = (grpFilter === "ALL" ? gsMatches : gsMatches.filter(m => m.group === grpFilter))
+                .filter(matchesSearch);
+            const filteredKo = koMatches.filter(matchesSearch);
+
+            return (
+                <div style={S.page} className="pc-root">
+                    <div style={S.colorStrip} className="pc-strip" />
+                    <span style={{ ...S.sparkle, top: 120, left: 18 }} className="pc-sparkle">✦</span>
+                    <span style={{ ...S.sparkle, top: 260, right: 14, animationDelay: ".7s" }}
+                    className="pc-sparkle">✦</span>
+                    <span style={{ ...S.sparkle, top: 480, left: 26, animationDelay: "1.3s" }}
+                    className="pc-sparkle">✦</span>
+                    {toast && <div style={S.toast} className="pc-toast-in">{toast}</div>}
+
+                    {pinOpen && (
+                        <Veil onBg={() => { setPinOpen(false);
+                                setPinVal("");
+                                setPinErr(false); }}>
+                            <p style={S.mh}>🔐 Admin Login</p>
+                            <p style={{ fontSize: 12, color: "#9a8454", margin: "0 0 12px" }}>Enter the admin passcode
+                                to edit matches &amp; results.</p>
+                            <input className="pc-input" style={{ ...S.inp, textAlign: "center", fontSize: 20,
+                                    letterSpacing: 6, marginBottom: 8, fontFamily: "var(--font-mono)",
+                                    textTransform: "uppercase" }}
+                                type="password" maxLength={12} placeholder="Passcode" value={pinVal} autoFocus
+                                onChange={e => { setPinVal(e.target.value);
+                                    setPinErr(false); }}
+                                onKeyDown={e => e.key === "Enter" && login()} />
+                            {pinErr && <p style={S.err}>❌ Wrong passcode</p>}
+                            <div style={S.row}>
+                                <button className="pc-btn" style={S.cancelBtn} onClick={() => { setPinOpen(false);
+                                        setPinVal(""); }}>Cancel</button>
+                                <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, flex: 1 }}
+                                onClick={login}>Login</button>
+                            </div>
+                        </Veil>
+                    )}
+                    {pModal && <PredsModal match={pModal} onSave={savePreds} onClose={() => setPModal(null)} />}
+                    {rModal && <ResultModal match={rModal} onSave={saveResult} onClear={requestClearResult}
+                            onClose={() => setRModal(null)} />}
+                    {confirmClear && (
+                        <Veil onBg={() => setConfirmClear(null)}>
+                            <p style={S.mh}>↩️ Clear this result?</p>
+                            <p style={{ fontSize: 13, color: "#9a9488", margin: "0 0 18px", lineHeight: 1.6 }}>
+                                এই match-এর result মুছে গেলে সবার points আবার recalculate হবে। এটা undo করা যাবে না —
+                                চাইলে আবার নতুন result বসাতে পারবে।
+                            </p>
+                            <div style={S.row}>
+                                <button className="pc-btn" style={S.cancelBtn} onClick={() => setConfirmClear(
+                                    null)}>Cancel</button>
+                                <button className="pc-btn" style={{ ...S.redBtn, flex: 1 }}
+                                onClick={confirmClearResult}>🗑 Yes, clear it</button>
+                            </div>
+                        </Veil>
+                    )}
+                    {editKO && <EditKnockoutModal match={editKO} onSave={updateKnockout} onClose={() => setEditKO(
+                        null)} />}
+                    {deleteKO && (
+                        <Veil onBg={() => setDeleteKO(null)}>
+                            <p style={S.mh}>🗑 Delete this match?</p>
+                            <p style={{ fontSize: 13, color: "#9a9488", margin: "0 0 18px", lineHeight: 1.6 }}>
+                                সবার predictions ও result সহ এই knockout match permanently মুছে যাবে।
+                            </p>
+                            <div style={S.row}>
+                                <button className="pc-btn" style={S.cancelBtn} onClick={() => setDeleteKO(
+                                    null)}>Cancel</button>
+                                <button className="pc-btn" style={{ ...S.redBtn, flex: 1 }}
+                                onClick={confirmDeleteKnockout}>🗑 Yes, delete</button>
+                            </div>
+                        </Veil>
+                    )}
+                    {histP && (
+                        <Veil onBg={() => setHistP(null)}>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center",
+                                    marginBottom: 12 }}>
+                                <p style={{ ...S.mh, margin: 0 }}>📋 {histP}'s History</p>
+                                <button className="pc-btn" style={S.xBtn} onClick={() => setHistP(null)}>✕</button>
+                            </div>
+                            <div style={{ maxHeight: 400, overflowY: "auto" }}>
+                                {app.matches.map(m => {
+                                    const pr = m.predictions?.[histP];
+                                    const pts = m.result?.winner ? (calcPts(m.predictions, m.result, m
+                                        .stage)[histP] ?? 0) : null;
+                                    return (
+                                        <div key={m.id} style={S.histRow}>
+                                            <div style={{ flex: 1 }}>
+                                                <div style={{ fontSize: 10, color: "#c9a13b",
+                                                        fontWeight: 700, textTransform: "uppercase",
+                                                        letterSpacing: 0.4 }}>
+                                                    {m.stage}{m.group ? ` · Group ${m.group}` : ""}
+                                                </div>
+                                                <div style={{ fontSize: 13, fontWeight: 600,
+                                                        color: "#fff" }}>{m.team1} vs {m.team2}</div>
+                                                <div style={{ fontSize: 12, color: "#6b6450" }}>
+                                                    Predict: {pr?.winner ? `${pr.winner} ${pr.score1}–${pr.score2}` :
+                                                        "—"}
+                                                </div>
+                                                {m.result?.winner && <div style={{ fontSize: 12,
+                                                        color: "#4ade80" }}>Result: {m.result.winner} {m
+                                                        .result.score1}–{m.result.score2}</div>}
+                                            </div>
+                                            {pts !== null && (
+                                                <span style={{ ...S.ptBadge, padding: "4px 10px",
+                                                        fontSize: 12,
+                                                        background: pts >= 2 ? "#1a4d2e" : pts === 1.5 ||
+                                                            pts === 2.5 ? "#5a3a08" : pts === 1 ?
+                                                            "#5a4416" : "#4a1818",
+                                                        color: pts >= 2 ? "#4ade80" : pts === 1.5 ||
+                                                            pts === 2.5 ? "#fb923c" : pts === 1 ?
+                                                            "#facc15" : "#fca5a5" }}>
+                                                    {pts >= 2 ? `⭐ ${pts}` : pts === 1.5 || pts === 2.5 ?
+                                                        `🎯 ${pts}` : `${pts > 0 ? "✅ 1" : "❌ 0"}`} pts
+                                                </span>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                            <button className="pc-btn pc-gold-btn" style={{ ...S.goldBtn, width: "100%",
+                                    marginTop: 12 }} onClick={() => setHistP(null)}>Close</button>
+                        </Veil>
+                    )}
+
+                    <header style={S.header} className="pc-fade-up">
+                        <div style={S.stadiumSweep} />
+                        <span style={{ ...S.deco, top: 8, right: 64, fontSize: 22 }} className="pc-float">⚽</span>
+                        <span style={{ ...S.deco, bottom: 2, left: 14, fontSize: 17, animationDelay: "1.4s" }}
+                        className="pc-float">🏆</span>
+                        <span style={{ ...S.deco, top: 46, right: 18, fontSize: 13, animationDelay: "2.6s" }}
+                        className="pc-float">✨</span>
+                        <span style={{ ...S.deco, top: 14, left: 120, fontSize: 14, animationDelay: "3.2s" }}
+                        className="pc-float">🥅</span>
+                        <span style={{ ...S.deco, bottom: 8, right: 120, fontSize: 12, animationDelay: "1.9s" }}
+                        className="pc-float">🎯</span>
+                        <div style={S.hTopRow}>
+                            <div style={S.h26}>
+                                <span style={S.h26Num} className="pc-shimmer-text">26</span>
+                                <div style={S.h26Text}>
+                                    <div style={S.h26Title}>PREDICT CUP</div>
+                                    <div style={S.h26Sub}>FIFA WORLD CUP 2026™ · FAN EDITION</div>
+                                </div>
+                            </div>
+                            <div style={S.trophyIcon} className="pc-crown pc-trophy-hover">🏆</div>
+                        </div>
+                        <div style={S.hBottomRow}>
+                            <div style={S.hNames}>⚽ Ahin &nbsp;·&nbsp; Sifat &nbsp;·&nbsp; Tamim</div>
+                            {isAdmin ?
+                                <button className="pc-btn" style={S.adminPill} onClick={() => setIsAdmin(
+                                false)}>🔐 ADMIN ✕</button> :
+                                <button className="pc-btn" style={S.loginPill} onClick={() => setPinOpen(
+                                true)}>🔐 Admin</button>}
+                        </div>
+                        <div style={S.lbBar}>
+                            {lb.map((p, i) => (
+                                <div key={p.name} style={{ ...S.lbChip, borderColor: HOST_ACCENTS[i] +
+                                        "55", ...(i === 0 && p.p > 0 ? { borderColor: "#ffd54a99",
+                                            boxShadow: "0 0 0 1px #ffd54a33 inset" } : {}) }}>
+                                    {MEDALS[i]} <b style={{ marginLeft: 3,
+                                        fontFamily: "var(--font-display)" }}>{p.name}</b>
+                                    <span style={S.chipPt}>{p.p}pt</span>
+                                </div>
+                            ))}
+                            <div style={{ ...S.lbChip, color: "#6b6450", borderColor: "#2e2818" }}>{done}/{total}
+                            ✓</div>
+                        </div>
+                    </header>
+
+                    <TabNav tab={tab} setTab={setTab} />
+
+                    <main style={S.main} key={tab}>
+                        <div className="pc-pop-in">
+                            {tab === "matches" && (
+                                <>
+                                    <div style={S.searchWrap}>
+                                        <span style={S.searchIcon}>🔎</span>
+                                        <input className="pc-input" style={S.searchInp} value={searchQ}
+                                            placeholder="Search team name…" onChange={e => setSearchQ(e.target
+                                                .value)} />
+                                        {searchQ && <button className="pc-btn" style={S.searchClear} onClick={() =>
+                                                setSearchQ("")}>✕</button>}
+                                    </div>
+                                    <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 14 }}>
+                                        {groups.map(g => (
+                                            <button key={g} className="pc-btn" style={{ ...S.grpBtn,
+                                                    ...(grpFilter === g ? S.grpBtnOn : {}) }} onClick={() =>
+                                                    setGrpFilter(g)}>
+                                                {g === "ALL" ? "All Groups" : `Grp ${g}`}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    {filteredGs.length === 0 && filteredKo.length === 0 && (
+                                        <div style={S.empty}>
+                                            <div style={{ fontSize: 40 }}>🔍</div>
+                                            <div style={{ fontWeight: 600, marginTop: 8,
+                                                color: "#9a9488" }}>No matches found</div>
+                                            <div style={{ fontSize: 13, color: "#6b6450", marginTop: 4 }}>Try a
+                                                different team name or clear filters</div>
+                                        </div>
+                                    )}
+                                    {filteredGs.map((match, i) => (
+                                        <MatchCard key={match.id} match={match} isAdmin={isAdmin} idx={i}
+                                            onPred={() => setPModal(match)} onResult={() => setRModal(match)} />
+                                    ))}
+                                    {filteredKo.length > 0 && (
+                                        <>
+                                            {STAGES.filter(s => s !== "Group Stage").map(stage => {
+                                                const sm = filteredKo.filter(m => m.stage === stage);
+                                                if (!sm.length) return null;
+                                                return (
+                                                    <div key={stage}>
+                                                        <div style={S.stageHd}>{STAGE_ICO[stage]} {stage}</div>
+                                                        {sm.map((match, i) => (
+                                                            <MatchCard key={match.id} match={match}
+                                                                isAdmin={isAdmin} idx={i}
+                                                                onPred={() => setPModal(match)}
+                                                                onResult={() => setRModal(match)}
+                                                                onEditKO={() => setEditKO(match)}
+                                                                onDeleteKO={() => requestDeleteKnockout(
+                                                                    match.id)} />
+                                                        ))}
+                                                    </div>
+                                                );
+                                            })}
+                                        </>
+                                    )}
+                                </>
+                            )}
+
+                            {tab === "board" && (
+                                <div>
+                                    <h2 style={S.secH}>🏆 Leaderboard</h2>
+                                    <Podium lb={lb} />
+                                    {lb.map((p, i) => (
+                                        <div key={p.name} className="pc-card-hover pc-fade-up" style={{ ...S
+                                                .lbRow, ...(i === 0 && p.p > 0 ? S.lbGold : {}),
+                                                borderLeftColor: HOST_ACCENTS[i], animationDelay: `${i *
+                                                    0.08}s` }}>
+                                            <div style={{ fontSize: 26, width: 38 }}>{MEDALS[i]}</div>
+                                            <div style={{ flex: 1, fontWeight: 700, fontSize: 18,
+                                                    fontFamily: "var(--font-display)" }}>{p.name}</div>
+                                            <div style={{ fontWeight: 900, color: "#ffd54a", fontSize: 24,
+                                                    fontFamily: "var(--font-display)" }}>{p.p}</div>
+                                            <div style={{ fontSize: 12, color: "#6b6450",
+                                                marginLeft: 3 }}>pts</div>
+                                            <div style={{ width: 64, background: "#1c1810", borderRadius: 4,
+                                                    height: 10, marginLeft: 12, overflow: "hidden" }}>
+                                                <div style={{ height: 10, borderRadius: 4,
+                                                        transition: "width .8s cubic-bezier(.2,.8,.3,1)",
+                                                        width: `${Math.max(6, (p.p / Math.max(1, lb[0]
+                                                            .p)) * 100)}%`,
+                                                        background: i === 0 ?
+                                                        "linear-gradient(90deg,#ffd54a,#fff7d6)" : i ===
+                                                        1 ? "#9a9488" : "#b8743a" }} />
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {PLAYERS.map((pl, idx) => {
+                                        const plMatches = app.matches.filter(m => m.result?.winner && m
+                                            .predictions?.[pl]?.winner);
+                                        const plMatchPts = plMatches.reduce((acc, m) => acc + (calcPts(
+                                            m.predictions, m.result, m.stage)[pl] ?? 0), 0);
+                                        const correct = plMatches.filter(m => calcPts(m.predictions, m
+                                            .result, m.stage)[pl] > 0).length;
+                                        const perfect = plMatches.filter(m => {
+                                            const exactPt = BIG_STAGES.includes(m.stage) ? 3 : 2;
+                                            return calcPts(m.predictions, m.result, m.stage)[pl] ===
+                                                exactPt;
+                                        }).length;
+                                        const plAwardPts = awardPts[pl]?.total ?? 0;
+                                        const plStandingPts = standingPts[pl]?.total ?? 0;
+                                        const plPts = plMatchPts + plAwardPts + plStandingPts;
+                                        return (
+                                            <div key={pl} className="pc-card-hover" style={{ ...S
+                                                    .card, padding: 14, marginBottom: 8,
+                                                    borderLeft: `3px solid ${HOST_ACCENTS[idx]}` }}>
+                                                <div style={{ display: "flex",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center", marginBottom: 8 }}>
+                                                    <div style={{ fontWeight: 700, fontSize: 15,
+                                                            color: "#ffd54a",
+                                                            fontFamily: "var(--font-display)" }}>{pl}</div>
+                                                    <div style={{ fontWeight: 900, color: "#ffd54a",
+                                                            fontSize: 18,
+                                                            fontFamily: "var(--font-display)" }}>{plPts}
+                                                        pts</div>
+                                                </div>
+                                                <div style={{ display: "flex", gap: 12, fontSize: 12,
+                                                        color: "#9a9488", flexWrap: "wrap" }}>
+                                                    <span>✅ {correct} correct</span>
+                                                    <span>⭐ {perfect} perfect</span>
+                                                    <span>📋 {plMatches.length} predicted</span>
+                                                    {plAwardPts > 0 && <span>🏅 +{plAwardPts} awards</span>}
+                                                    {plStandingPts > 0 && <span>🏆 +{plStandingPts}
+                                                        finals</span>}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                    <div className="pc-card-hover" style={{ ...S.card, padding: 16,
+                                            marginTop: 8 }}>
+                                        <div style={{ fontWeight: 700, color: "#ffd54a", marginBottom: 10,
+                                                fontFamily: "var(--font-display)" }}>📜 Match Point Rules</div>
+                                        {[
+                                            ["⭐", "2 pts",
+                                                "Group/R32/R16/QF — correct winner + exact score"
+                                            ],
+                                            ["🎯", "1.5 pts",
+                                                "R32/R16/QF — drew score predicted + match went to pens + correct team (bonus!)"
+                                            ],
+                                            ["✅", "1 pt", "Group/R32/R16/QF — correct winner only"],
+                                            ["🌟", "3 pts",
+                                                "Semi/3rd Place/Final — correct winner + exact score"
+                                            ],
+                                            ["🎯", "2.5 pts",
+                                                "Semi/3rd Place/Final — drew score predicted + match went to pens + correct team (bonus!)"
+                                            ],
+                                            ["🔥", "2 pts",
+                                                "Semi/3rd Place/Final — correct winner only"],
+                                            ["❌", "0 pts", "Wrong or no prediction"],
+                                        ].map(([ic, pt, d]) => (
+                                            <div key={d} style={{ display: "flex", gap: 8,
+                                                    alignItems: "center", marginBottom: 8,
+                                                    fontSize: 13 }}>
+                                                <span>{ic}</span><b style={{ minWidth: 44,
+                                                        fontFamily: "var(--font-display)" }}>{pt}</b><span
+                                                    style={{ color: "#9a9488" }}>{d}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <VerifyPanel matches={app.matches} />
+                                </div>
+                            )}
+
+                            {tab === "awards" && (
+                                <AwardsTab
+                                    app={app} isAdmin={isAdmin} awardPts={awardPts} standingPts={standingPts}
+                                    editAwardPlayer={editAwardPlayer} setEditAwardPlayer={setEditAwardPlayer}
+                                    editAwardResults={editAwardResults} setEditAwardResults={setEditAwardResults}
+                                    editStandPlayer={editStandPlayer} setEditStandPlayer={setEditStandPlayer}
+                                    editStandResults={editStandResults} setEditStandResults={setEditStandResults}
+                                    onSaveAwardPreds={saveAwardPreds} onSaveAwardResults={saveAwardResults}
+                                    onSaveStandingPreds={saveStandingPreds}
+                                    onSaveStandingResults={saveStandingResults}
+                                />
+                            )}
+
+                            {tab === "history" && (
+                                <div>
+                                    <h2 style={S.secH}>📋 Player History</h2>
+                                    <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+                                        {PLAYERS.map((p, i) => (
+                                            <button key={p} className="pc-btn pc-gold-btn" style={{ ...S
+                                                    .goldBtn, flex: 1, borderBottom: `3px solid ${HOST_ACCENTS[i]}` }}
+                                                onClick={() => setHistP(p)}>{p}</button>
+                                        ))}
+                                    </div>
+                                    <p style={{ textAlign: "center", color: "#6b6450", fontSize: 13 }}>👆 Select a
+                                        player to view history</p>
+                                </div>
+                            )}
+
+                            {tab === "knockout" && (
+                                <GroupTableAndBracket matches={app.matches} isAdmin={isAdmin}
+                                    onAddKnockout={addKnockout} />
+                            )}
+                        </div>
+                    </main>
+
+                    <footer style={S.footer}>
+                        ⚽ Unofficial fan-made predict cup · Not affiliated with FIFA
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(React.createElement(App));
+    </script>
+</body>
+</html>
